@@ -286,9 +286,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('.open-modal-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-          // Natively redirect to the link's href (YooKassa link)
-          window.location.href = YOOKASSA_PAYMENT_URL;
+      btn.removeAttribute('href'); // Remove direct link to prevent browser default navigation
+      btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          
+          const clickedBtn = e.currentTarget;
+          const originalText = clickedBtn.innerHTML;
+          clickedBtn.style.pointerEvents = 'none';
+          clickedBtn.innerHTML = 'Создание платежа...';
+
+          try {
+              const response = await fetch('/api/create-payment', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              });
+
+              if (!response.ok) {
+                  const errData = await response.json();
+                  throw new Error(errData.error || 'Ошибка при создании платежа');
+              }
+
+              const data = await response.json();
+              if (data.confirmation && data.confirmation.confirmation_url) {
+                  window.location.href = data.confirmation.confirmation_url;
+              } else {
+                  throw new Error('Не удалось получить ссылку на оплату');
+              }
+          } catch (err) {
+              console.error(err);
+              alert('Ошибка при создании платежа: ' + err.message + '\nПожалуйста, убедитесь, что локальный сервер (server.py) запущен.');
+              clickedBtn.style.pointerEvents = '';
+              clickedBtn.innerHTML = originalText;
+          }
       });
   });
 
@@ -396,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   
                   // Reset submit button state
                   if (submitBtn) submitBtn.disabled = false;
-                  if (btnText) btnText.textContent = 'Оплатить тест-драйв за 990 ₽';
+                  if (btnText) btnText.textContent = 'Оплатить тест-драйв';
                   if (btnSpinner) btnSpinner.style.display = 'none';
                   
                   if (formMsg) {
@@ -412,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
               
               // Reset submit button state
               if (submitBtn) submitBtn.disabled = false;
-              if (btnText) btnText.textContent = 'Оплатить тест-драйв за 990 ₽';
+              if (btnText) btnText.textContent = 'Оплатить тест-драйв';
               if (btnSpinner) btnSpinner.style.display = 'none';
               
               if (formMsg) {

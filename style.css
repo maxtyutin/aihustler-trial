@@ -1,7 +1,7 @@
 /* Premium Dark Tech Design System for AI Advertiser VSL */
 
 :root {
-  --background: #090a0f;
+  --background: #0a0a0c;
   --background-soft: #11131c;
   --surface: #171923;
   --surface-glass: rgba(23, 25, 35, 0.7);
@@ -20,8 +20,8 @@
   --shadow-soft: rgba(0, 0, 0, 0.4);
   --shadow-glow: rgba(77, 142, 255, 0.25);
   
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
   
   --maxw: 1200px;
   --t: 250ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -36,10 +36,11 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--background);
 }
 
 body.fbz {
-  background-color: var(--background);
+  background-color: transparent;
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 16px;
@@ -140,7 +141,7 @@ body.fbz {
 }
 
 .band {
-  background-color: var(--background);
+  background-color: transparent;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
@@ -164,8 +165,11 @@ h1, h2, h3 {
 }
 
 .display {
-  font-size: clamp(32px, 5vw, 54px);
-  font-weight: 800;
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
   margin: 40px auto 24px;
   max-width: 960px;
   text-align: center;
@@ -173,26 +177,36 @@ h1, h2, h3 {
 
 .h2-56 {
   font-size: clamp(28px, 4vw, 48px);
-  font-weight: 700;
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
 }
 
 .h2-48 {
-  font-size: clamp(26px, 3.5vw, 42px);
-  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
 }
 
 .h3-22 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 .body-l {
-  font-size: 18px;
+  font-size: 14px;
+  line-height: 1.6;
   color: var(--text-muted);
 }
 
 .body-m {
-  font-size: 15px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-muted);
 }
 
 .body-s {
@@ -212,6 +226,7 @@ h1, h2, h3 {
 }
 
 .mb10 { margin-bottom: 10px; }
+.mb12 { margin-bottom: 12px; }
 .mb16 { margin-bottom: 16px; }
 .mb20 { margin-bottom: 20px; }
 .mb24 { margin-bottom: 24px; }
@@ -262,26 +277,27 @@ h1, h2, h3 {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: var(--cta-primary);
-  color: #ffffff;
+  background: linear-gradient(135deg, #adc6ff 0%, #4d8eff 50%, #adc6ff 100%);
+  color: #001a42;
   font-family: var(--font-body);
-  font-size: 18px;
-  font-weight: 800;
-  padding: 20px 48px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 28px;
   border: 0;
-  border-radius: 99px;
+  border-radius: 6px;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 8px 30px var(--shadow-glow);
-  transition: transform var(--t), background-color var(--t), box-shadow var(--t);
-  animation: pulse-button 2.5s ease-in-out infinite;
+  box-shadow: 0 0 25px rgba(77, 142, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
 }
 
 .btn-primary:hover {
-  background-color: var(--cta-primary-warm);
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 12px 40px var(--shadow-glow);
-  animation: none;
+  transform: scale(1.02);
+  opacity: 0.95;
+  box-shadow: 0 0 35px rgba(173, 198, 255, 0.6) !important;
 }
 
 .btn-primary.full {
@@ -1512,27 +1528,28 @@ h1, h2, h3 {
 
 .form-submit-btn {
   width: 100%;
-  background-color: var(--cta-primary);
-  color: #ffffff;
-  border: none;
-  border-radius: 30px;
-  padding: 1.1rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: inherit;
-  letter-spacing: -0.01em;
-  cursor: pointer;
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: background-color var(--t), transform var(--t), box-shadow var(--t);
-  box-shadow: 0 4px 15px var(--shadow-glow);
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #adc6ff 0%, #4d8eff 50%, #adc6ff 100%);
+  color: #001a42;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 16px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(77, 142, 255, 0.3);
 }
 
 .form-submit-btn:hover:not(:disabled) {
-  background-color: var(--cta-primary-warm);
+  transform: scale(1.02);
+  box-shadow: 0 0 30px rgba(173, 198, 255, 0.5) !important;
 }
 
 .form-submit-btn:not(:hover):not(:disabled) {
@@ -2325,4 +2342,40 @@ h1, h2, h3 {
   color: var(--text-muted);
   margin: 0;
   font-style: italic;
+}
+
+
+
+
+/* Text gradient helper */
+.text-gradient {
+  background: linear-gradient(180deg, #adc6ff 0%, #4d8eff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Static fixed grid background across the whole site */
+body.fbz::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Splendid-kepler noise overlay rendering above everything */
+body.fbz::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
 }
