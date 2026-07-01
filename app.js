@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // НАСТРОЙКА: Ссылка на ваш бэкенд на Vercel для работы платежей на GitHub Pages
+  // (Замените на вашу ссылку после деплоя репозитория на Vercel)
+  const VERCEL_API_URL = "https://aihustler-trial.onrender.com";
   // 1. Modal & Quiz Logic
   // НАСТРОЙКА: Ссылка для перенаправления в Telegram после заполнения формы
   const TELEGRAM_LINK = "https://t.me/ai_hustlers_bot?start=welcome";
@@ -296,7 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
           clickedBtn.innerHTML = 'Создание платежа...';
 
           try {
-              const response = await fetch('/api/create-payment', {
+              let apiUrl = '/api/create-payment';
+              if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
+                  apiUrl = `${VERCEL_API_URL}/api/create-payment`;
+              }
+              const response = await fetch(apiUrl, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
