@@ -2,6 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // НАСТРОЙКА: Ссылка на ваш бэкенд на Render для работы платежей на GitHub Pages
   const VERCEL_API_URL = "https://aihustler-trial.onrender.com";
 
+  // РАЗОГРЕВ СЕРВЕРА RENDER (для мгновенного ответа при оплате)
+  let pingUrl = '/api/create-payment';
+  if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
+      pingUrl = `${VERCEL_API_URL}/api/create-payment`;
+  }
+  // Отправляем OPTIONS запрос для пробуждения "спящего" сервера Render в фоновом режиме
+  fetch(pingUrl, { method: 'OPTIONS' }).catch(() => {});
+
   // НАСТРОЙКА: Ключ доступа Web3Forms для отправки заявок на почту
   const WEB3FORMS_ACCESS_KEY = "41bc8576-ffd3-4a5d-bf2f-456a11df1864";
 
@@ -123,8 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
           });
           
           try {
-              // 1. Send lead data to Web3Forms (emails to maxtyutin@gmail.com)
-              const leadResponse = await fetch('https://api.web3forms.com/submit', {
+              if (btnText) btnText.textContent = 'Переход к оплате...';
+
+              let apiUrl = '/api/create-payment';
+              if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
+                  apiUrl = `${VERCEL_API_URL}/api/create-payment`;
+              }
+
+              // Запускаем отправку контактов и создание платежа параллельно
+              const leadPromise = fetch('https://api.web3forms.com/submit', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -133,26 +148,20 @@ document.addEventListener('DOMContentLoaded', () => {
                   body: JSON.stringify(jsonObject)
               });
 
-              const leadResult = await leadResponse.json();
-
-              if (!leadResult.success) {
-                  throw new Error(leadResult.message || 'Ошибка сохранения контактных данных');
-              }
-
-              // 2. Lead data sent! Now initiate YooKassa Payment via our server proxy
-              if (btnText) btnText.textContent = 'Создание платежа...';
-
-              let apiUrl = '/api/create-payment';
-              if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
-                  apiUrl = `${VERCEL_API_URL}/api/create-payment`;
-              }
-
-              const paymentResponse = await fetch(apiUrl, {
+              const paymentPromise = fetch(apiUrl, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
                   }
               });
+
+              // Ждем выполнения обоих запросов одновременно
+              const [leadResponse, paymentResponse] = await Promise.all([leadPromise, paymentPromise]);
+
+              const leadResult = await leadResponse.json();
+              if (!leadResult.success) {
+                  throw new Error(leadResult.message || 'Ошибка сохранения контактных данных');
+              }
 
               if (!paymentResponse.ok) {
                   const errData = await paymentResponse.json();
@@ -161,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               const paymentResult = await paymentResponse.json();
               if (paymentResult.confirmation && paymentResult.confirmation.confirmation_url) {
-                  // Redirect directly to payment confirmation
+                  // Мгновенный переход на оплату
                   window.location.href = paymentResult.confirmation.confirmation_url;
               } else {
                   throw new Error('Не удалось получить платежную ссылку от YooKassa');
