@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.3.0">
+  <link rel="stylesheet" href="style.css?v=2.3.3">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/css/intlTelInput.css">
   
   <!-- Favicon -->
@@ -77,6 +77,13 @@
         <video id="heroVideo" src="hero-video.mp4" controls preload="metadata"></video>
       </div>
 
+      <div class="hero-price-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 32px auto 24px auto; text-align: center; font-family: 'Space Grotesk', 'Outfit', 'Manrope', sans-serif;">
+        <span class="was-price" style="text-decoration: line-through; color: #ff4d4d; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em;">150 000 ₽</span>
+        <span class="now-price" style="color: #10b981; font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;">990 ₽</span>
+        <span class="timer-text" style="color: #4d8eff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
+        <span class="label-text" style="color: #8c909f; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px;">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
+      </div>
+      
       <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
 
       <div class="proof">
@@ -316,7 +323,14 @@
       </div>
       
       <div class="center mt40">
-        <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
+        <div class="hero-price-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 32px auto 24px auto; text-align: center; font-family: 'Space Grotesk', 'Outfit', 'Manrope', sans-serif;">
+        <span class="was-price" style="text-decoration: line-through; color: #ff4d4d; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em;">150 000 ₽</span>
+        <span class="now-price" style="color: #10b981; font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;">990 ₽</span>
+        <span class="timer-text" style="color: #4d8eff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
+        <span class="label-text" style="color: #8c909f; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px;">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
+      </div>
+      
+      <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
       </div>
     </div>
   </section>
@@ -507,8 +521,51 @@
     </div>
   </footer>
 
+  <!-- Application Modal -->
+  <div class="modal-overlay" id="app-modal">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="modal-header">
+        <h3 class="modal-title" style="font-family: 'Space Grotesk', 'Manrope', sans-serif; font-weight: 800; font-size: 1.5rem; text-transform: uppercase; background: linear-gradient(180deg, #adc6ff 0%, #4d8eff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; text-align: left;">ТЕСТ-ДРАЙВ СИСТЕМЫ</h3>
+        <p class="modal-desc" style="font-size: 0.9rem; color: #888; margin-bottom: 1.5rem; line-height: 1.5; text-align: left;">Заполните форму, чтобы начать трехдневный тест-драйв системы.</p>
+      </div>
+      <form id="app-form" action="https://api.web3forms.com/submit" method="POST" autocomplete="on" accept-charset="UTF-8" style="display: flex; flex-direction: column; gap: 1rem;">
+        <!-- Web3Forms Configuration -->
+        <input type="hidden" name="access_key" id="web3forms-access-key" value="41bc8576-ffd3-4a5d-bf2f-456a11df1864">
+        <input type="hidden" name="subject" value="Новая заявка на тест-драйв AI HUSTLER">
+        <input type="hidden" name="from_name" value="AI Hustler Website">
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        
+        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
+          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Имя <span style="color: #ffb780;">*</span></label>
+          <input type="text" id="name_input" required placeholder="Ваше имя" class="form-control" name="name" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
+          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Email <span style="color: #ffb780;">*</span></label>
+          <input type="email" id="email_input" required placeholder="your-email@mail.com" class="form-control" name="email" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
+          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Телефон <span style="color: #ffb780;">*</span></label>
+          <input type="tel" id="phone" required class="form-control" name="phone" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
+        </div>
+        
+        <p class="form-disclaimer" style="font-size: 11px; line-height: 1.5; color: #8c909f; text-align: center; margin: 8px 0 12px; font-family: inherit;">
+          Нажимая на кнопку, вы соглашаетесь с условиями и даете согласие на обработку персональных данных.
+        </p>
+        
+        <button type="submit" id="submit-btn" class="btn-primary full" style="width: 100%; border: none;">
+          <span>ОПЛАТИТЬ ТЕСТ-ДРАЙВ ➔</span>
+          <span id="btn-spinner" class="spinner" style="display: none;"></span>
+        </button>
+        <div id="form-msg" class="form-message" style="display: none; color: #ff8080; font-size: 13px; text-align: center; margin-top: 10px;"></div>
+      </form>
+    </div>
+  </div>
+
   <!-- Подключаем скрипт выбора страны для телефона -->
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/js/intlTelInput.min.js"></script>
-  <script src="app.js?v=2.3.0"></script>
+  <script src="app.js?v=2.3.3"></script>
 </body>
 </html>
