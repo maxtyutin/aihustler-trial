@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.3.2">
+  <link rel="stylesheet" href="style.css?v=2.3.3">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/css/intlTelInput.css">
   
   <!-- Favicon -->
@@ -77,6 +77,13 @@
         <video id="heroVideo" src="hero-video.mp4" controls preload="metadata"></video>
       </div>
 
+      <div class="hero-price-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 32px auto 24px auto; text-align: center; font-family: 'Space Grotesk', 'Outfit', 'Manrope', sans-serif;">
+        <span class="was-price" style="text-decoration: line-through; color: #ff4d4d; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em;">150 000 ₽</span>
+        <span class="now-price" style="color: #10b981; font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;">990 ₽</span>
+        <span class="timer-text" style="color: #4d8eff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
+        <span class="label-text" style="color: #8c909f; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px;">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
+      </div>
+      
       <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
 
       <div class="proof">
@@ -316,7 +323,14 @@
       </div>
       
       <div class="center mt40">
-        <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
+        <div class="hero-price-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 32px auto 24px auto; text-align: center; font-family: 'Space Grotesk', 'Outfit', 'Manrope', sans-serif;">
+        <span class="was-price" style="text-decoration: line-through; color: #ff4d4d; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em;">150 000 ₽</span>
+        <span class="now-price" style="color: #10b981; font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;">990 ₽</span>
+        <span class="timer-text" style="color: #4d8eff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
+        <span class="label-text" style="color: #8c909f; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px;">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
+      </div>
+      
+      <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
       </div>
     </div>
   </section>
@@ -552,6 +566,6 @@
 
   <!-- Подключаем скрипт выбора страны для телефона -->
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/js/intlTelInput.min.js"></script>
-  <script src="app.js?v=2.3.2"></script>
+  <script src="app.js?v=2.3.3"></script>
 </body>
 </html>
