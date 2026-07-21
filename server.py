@@ -24,7 +24,7 @@ class PaymentHandler(http.server.SimpleHTTPRequestHandler):
                     'capture': True,
                     'confirmation': {
                         'type': 'redirect',
-                        'return_url': 'https://t.me/ai_hustlers_bot?start=welcome'
+                        'return_url': 'https://maxtyutin.github.io/aihustler-trial/confirmed.html'
                     },
                     'description': 'Тест-драйв системы AI HUSTLERS'
                 }).encode(),

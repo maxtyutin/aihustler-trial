@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест-драйв системы — AI HUSTLERS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2.4.4">
+  <style>
+    body.fbz {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+    
+    .loading-container {
+      margin: auto;
+      text-align: center;
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+      color: #8c909f;
+    }
+    
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(77, 142, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: #4d8eff;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto 20px auto;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .video-page-wrap {
+      width: 100%;
+      max-width: 960px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .header-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .brand-logo {
+      font-family: 'Space Grotesk', 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    .status-badge {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #10b981;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .status-badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px #10b981;
+    }
+    
+    .video-title {
+      font-family: 'Space Grotesk', 'Manrope', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.2;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    
+    .video-desc {
+      font-size: 1.05rem;
+      color: #8c909f;
+      text-align: center;
+      max-width: 640px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    
+    .player-container {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #131315;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 100px rgba(77, 142, 255, 0.1);
+      margin-bottom: 40px;
+      position: relative;
+    }
+    
+    .player-container iframe,
+    .player-container video {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    
+    .action-box {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 32px;
+      box-sizing: border-box;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .action-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    
+    .action-desc {
+      font-size: 0.95rem;
+      color: #8c909f;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .support-footer {
+      font-size: 0.85rem;
+      color: #616473;
+      margin-top: auto;
+      text-align: center;
+    }
+    
+    .support-footer a {
+      color: #4d8eff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="fbz">
+
+  <!-- Loading State -->
+  <div class="loading-container" id="loadingState">
+    <div class="spinner"></div>
+    <p>Проверка доступа к тест-драйву...</p>
+  </div>
+
+  <!-- Content State (visible only if paid) -->
+  <div class="video-page-wrap" id="contentState">
+    <div class="header-bar">
+      <div class="brand-logo"><span class="text-gradient">AI HUSTLERS</span></div>
+      <div class="status-badge">Доступ оплачен</div>
+    </div>
+
+    <h1 class="video-title">Практический тест-драйв ИИ-системы</h1>
+    <p class="video-desc">Посмотрите пошаговую инструкцию ниже, чтобы запустить ваших первых автономных ИИ-агентов всего за 1 вечер.</p>
+
+    <div class="player-container" id="playerContainer">
+      <!-- Контент плеера (iframe или video) подгружается динамически -->
+      <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #8c909f;">Загрузка плеера...</div>
+    </div>
+
+    <div class="action-box">
+      <div class="action-title">Шаг 2: Запустите ИИ-агента в Telegram</div>
+      <p class="action-desc">Перейдите в нашего бота поддержки, чтобы забрать готовые шаблоны промптов, файлы конфигурации Claude Code и настроить автопилот продаж.</p>
+      <a href="https://t.me/ai_hustlers_sale_bot" target="_blank" class="btn-primary btn-action">Запустить систему в Telegram ➔</a>
+    </div>
+
+    <div class="support-footer">
+      Возникли вопросы по настройке? Напишите нам: <a href="mailto:maxtyutin@gmail.com">maxtyutin@gmail.com</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const VERCEL_API_URL = "https://aihustler-trial-1.onrender.com";
+      const userId = localStorage.getItem('ai_hustlers_user_id');
+
+      if (!userId) {
+          // Если нет ID пользователя, перенаправляем на лендинг
+          window.location.href = 'index.html';
+          return;
+      }
+
+      // Формируем адрес проверки доступа
+      let checkUrl = `/api/check-access?userId=${userId}`;
+      if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
+          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}`;
+      }
+
+      fetch(checkUrl)
+          .then(res => {
+              if (!res.ok) throw new Error('Ошибка сервера');
+              return res.json();
+          })
+          .then(data => {
+              if (data.hasAccess) {
+                  // Отображаем плеер динамически (iframe для Kinescope/YouTube или video для direct mp4)
+                  const playerContainer = document.getElementById('playerContainer');
+                  if (playerContainer) {
+                      if (data.videoUrl.includes('kinescope.io') || data.videoUrl.includes('youtube.com') || data.videoUrl.includes('vimeo.com')) {
+                          playerContainer.innerHTML = `<iframe src="${data.videoUrl}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer" title="Video Player" allowfullscreen style="width: 100%; height: 100%; border: none;"></iframe>`;
+                      } else {
+                          playerContainer.innerHTML = `<video src="${data.videoUrl}" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video>`;
+                      }
+                  }
+                  document.getElementById('loadingState').style.display = 'none';
+                  document.getElementById('contentState').style.display = 'flex';
+              } else {
+                  // Если оплата не найдена, отправляем на покупку
+                  window.location.href = 'index.html';
+              }
+          })
+          .catch(err => {
+              console.error('Ошибка верификации доступа:', err);
+              window.location.href = 'index.html';
+          });
+    });
+  </script>
+
+</body>
+</html>

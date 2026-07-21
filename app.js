@@ -1,17 +1,102 @@
 document.addEventListener('DOMContentLoaded', () => {
   // НАСТРОЙКА: Ссылка на ваш бэкенд на Render для работы платежей на GitHub Pages
-  const VERCEL_API_URL = "https://aihustler-trial.onrender.com";
+  const VERCEL_API_URL = "https://aihustler-trial-1.onrender.com";
+
+  // НАСТРОЙКА: Ключ доступа Web3Forms для отправки заявок на почту
+  const WEB3FORMS_ACCESS_KEY = "41bc8576-ffd3-4a5d-bf2f-456a11df1864";
+
+  // ========================================================
+  // 1. ИДЕНТИФИКАЦИЯ ПОЛЬЗОВАТЕЛЯ И ПРОВЕРКА ДОСТУПА (ВИДЕО)
+  // ========================================================
+  
+  // Проверяем userId в параметрах URL
+  const urlParams = new URLSearchParams(window.location.search);
+  let userId = urlParams.get('userId');
+
+  if (userId) {
+      localStorage.setItem('ai_hustlers_user_id', userId);
+  } else {
+      userId = localStorage.getItem('ai_hustlers_user_id');
+      if (!userId) {
+          userId = 'user_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+          localStorage.setItem('ai_hustlers_user_id', userId);
+      }
+  }
+
+  // Функция для разблокировки платного видео на странице
+  function unlockPaidVideo(videoUrl) {
+      const heroVideo = document.getElementById('heroVideo');
+      const videoContainer = document.getElementById('videoContainer');
+      const videoOverlay = document.getElementById('videoOverlay');
+
+      if (heroVideo) {
+          // Меняем источник на платное видео
+          heroVideo.src = videoUrl;
+          heroVideo.load();
+      }
+
+      // Меняем отображение кнопки/бейджей
+      const heroPriceBlock = document.querySelector('.hero-price-block');
+      if (heroPriceBlock) {
+          heroPriceBlock.style.display = 'none';
+      }
+
+      // Меняем кнопки «Начать тест-драйв» на «Смотреть видео»
+      document.querySelectorAll('.open-modal-btn').forEach(btn => {
+          btn.innerHTML = 'Смотреть тест-драйв';
+          btn.removeAttribute('onclick');
+          btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              if (videoOverlay && !videoContainer.classList.contains('playing')) {
+                  videoOverlay.click();
+              }
+              document.getElementById('videoContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+      });
+
+      // Меняем нижнюю плашку на сообщение об успешном доступе
+      const claimSection = document.querySelector('.sec.claim');
+      if (claimSection) {
+          claimSection.innerHTML = `
+              <div class="wrap" style="text-align: center; padding: 40px 20px;">
+                  <h2 class="h2-48 center mb16" style="color: #10b981; font-weight: 800;">ДОСТУП УСПЕШНО ОПЛАЧЕН</h2>
+                  <p class="body-l muted maxw600 mx mb24">Вам открыт полный доступ к трехдневному тест-драйву системы AI HUSTLERS. Смотрите презентацию вверху страницы!</p>
+                  <a href="https://t.me/ai_hustlers_sale_bot" target="_blank" class="btn-primary" style="display: inline-block; max-width: 320px;">Перейти в Telegram-канал ➔</a>
+              </div>
+          `;
+      }
+  }
+
+  // Проверяем доступ на сервере Render
+  async function checkAccess() {
+      let checkUrl = `/api/check-access?userId=${userId}`;
+      if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
+          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}`;
+      }
+
+      try {
+          const res = await fetch(checkUrl);
+          if (res.ok) {
+              const data = await res.json();
+              if (data.hasAccess) {
+                  unlockPaidVideo(data.videoUrl);
+              }
+          }
+      } catch (err) {
+          console.error('Ошибка проверки доступа:', err);
+      }
+  }
+
+  // Запускаем проверку доступа при загрузке страницы
+  checkAccess();
 
   // РАЗОГРЕВ СЕРВЕРА RENDER (для мгновенного ответа при оплате)
   let pingUrl = '/api/create-payment';
   if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
       pingUrl = `${VERCEL_API_URL}/api/create-payment`;
   }
-  // Отправляем OPTIONS запрос для пробуждения "спящего" сервера Render в фоновом режиме
+  // Отправляем OPTIONS запрос для пробуждения спящего инстанса Render
   fetch(pingUrl, { method: 'OPTIONS' }).catch(() => {});
-
-  // НАСТРОЙКА: Ключ доступа Web3Forms для отправки заявок на почту
-  const WEB3FORMS_ACCESS_KEY = "41bc8576-ffd3-4a5d-bf2f-456a11df1864";
 
   // Инициализация библиотеки выбора кода страны (intl-tel-input)
   const phoneInput = document.querySelector("#phone");
@@ -118,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           if (submitBtn) submitBtn.disabled = true;
-          if (btnText) btnText.textContent = 'Отправка данных...';
+          if (btnText) btnText.textContent = 'Переход к оплате...';
           if (btnSpinner) btnSpinner.style.display = 'block';
           if (formMsg) {
               formMsg.style.display = 'none';
@@ -130,14 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
               jsonObject[key] = value;
           });
           
+          // Добавляем userId в данные лида для Web3Forms
+          jsonObject['userId'] = userId;
+
           try {
-              if (btnText) btnText.textContent = 'Переход к оплате...';
-
-              let apiUrl = '/api/create-payment';
-              if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
-                  apiUrl = `${VERCEL_API_URL}/api/create-payment`;
-              }
-
               // Запускаем отправку контактов и создание платежа параллельно
               const leadPromise = fetch('https://api.web3forms.com/submit', {
                   method: 'POST',
@@ -148,11 +229,18 @@ document.addEventListener('DOMContentLoaded', () => {
                   body: JSON.stringify(jsonObject)
               });
 
+              // Создание платежа на Render с передачей userId
+              let apiUrl = '/api/create-payment';
+              if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
+                  apiUrl = `${VERCEL_API_URL}/api/create-payment`;
+              }
+
               const paymentPromise = fetch(apiUrl, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
-                  }
+                  },
+                  body: JSON.stringify({ userId: userId })
               });
 
               // Ждем выполнения обоих запросов одновременно
@@ -169,9 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
               }
 
               const paymentResult = await paymentResponse.json();
-              if (paymentResult.confirmation && paymentResult.confirmation.confirmation_url) {
-                  // Мгновенный переход на оплату
-                  window.location.href = paymentResult.confirmation.confirmation_url;
+              if (paymentResult.paymentUrl) {
+                  // Перенаправляем на оплату
+                  window.location.href = paymentResult.paymentUrl;
               } else {
                   throw new Error('Не удалось получить платежную ссылку от YooKassa');
               }
