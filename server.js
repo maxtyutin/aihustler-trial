@@ -8,7 +8,8 @@ app.use(express.json());
 
 // Временное хранилище оплативших пользователей в памяти
 // (при перезапуске сервера список сбрасывается, для продакшена лучше подключить Supabase/MongoDB)
-const paidUsers = new Set();
+// Хранилище оплативших пользователей: userId -> { devices: Set }
+const paidUsers = new Map();
 
 const SHOP_ID = process.env.SHOP_ID || "1399769";
 const SECRET_KEY = process.env.SECRET_KEY || "test_UJCZKVoUNWzWbw8cDrhR6lMJm63JWIqfh-tE1WIk3z0";
@@ -74,7 +75,9 @@ app.post('/api/yookassa-webhook', (req, res) => {
   if (event.type === 'notification' && event.event === 'payment.succeeded') {
     const userId = event.object.metadata?.user_id;
     if (userId) {
-      paidUsers.add(userId);
+      if (!paidUsers.has(userId)) {
+        paidUsers.set(userId, { devices: new Set() });
+      }
       console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
     }
   }
@@ -86,13 +89,41 @@ app.post('/api/yookassa-webhook', (req, res) => {
 // 3. ПРОВЕРКА ДОСТУПА НА САЙТЕ
 // ==========================================
 app.get('/api/check-access', (req, res) => {
-  const userId = req.query.userId;
+  const { userId, deviceToken, day } = req.query;
+  const targetDay = day || '1';
 
   if (userId && paidUsers.has(userId)) {
-    return res.json({
-      hasAccess: true,
-      videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'
-    });
+    const userData = paidUsers.get(userId);
+
+    if (deviceToken) {
+      // Если устройство уже авторизовано
+      if (userData.devices.has(deviceToken)) {
+        let videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 1 (реальное видео)
+        if (targetDay === '2') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 2 (замените на свое видео)
+        } else if (targetDay === '3') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 3 (замените на свое видео)
+        }
+        return res.json({ hasAccess: true, videoUrl });
+      }
+
+      // Если лимит устройств (2 устройства) не превышен, привязываем новое
+      if (userData.devices.size < 2) {
+        userData.devices.add(deviceToken);
+        console.log(`[УСТРОЙСТВО] Привязано новое устройство ${deviceToken} к пользователю ${userId}`);
+        let videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 1
+        if (targetDay === '2') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 2
+        } else if (targetDay === '3') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 3
+        }
+        return res.json({ hasAccess: true, videoUrl });
+      }
+
+      // Превышен лимит устройств (защита от пересылки)
+      console.log(`[БЛОКИРОВКА] Попытка входа с 3-го устройства для ${userId}`);
+      return res.json({ hasAccess: false, reason: 'device_limit_exceeded' });
+    }
   }
 
   return res.json({ hasAccess: false });
@@ -113,7 +144,8 @@ async function sendTelegramMessage(chatId, text, keyboard) {
         chat_id: chatId,
         text: text,
         parse_mode: 'HTML',
-        reply_markup: keyboard ? { inline_keyboard: keyboard } : undefined
+        reply_markup: keyboard ? { inline_keyboard: keyboard } : undefined,
+        protect_content: true // Запрещает пересылку сообщений бота и копирование контента!
       })
     });
   } catch (err) {

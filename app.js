@@ -67,11 +67,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  // Проверяем доступ на сервере Render
+  // Проверяем доступ на сервере Render с токеном устройства для защиты от шаринга
   async function checkAccess() {
-      let checkUrl = `/api/check-access?userId=${userId}`;
+      let deviceToken = localStorage.getItem('ai_hustlers_device_token');
+      if (!deviceToken) {
+          deviceToken = 'dev_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+          localStorage.setItem('ai_hustlers_device_token', deviceToken);
+      }
+
+      let checkUrl = `/api/check-access?userId=${userId}&deviceToken=${deviceToken}`;
       if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
-          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}`;
+          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}&deviceToken=${deviceToken}`;
       }
 
       try {

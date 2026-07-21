@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.5.0">
+  <link rel="stylesheet" href="style.css?v=2.6.0">
   <style>
     body.fbz {
       min-height: 100vh;
@@ -189,13 +189,13 @@
         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
       </svg>
     </div>
-    <h2 class="h3-22" style="color: #fff; margin-bottom: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Доступ ограничен</h2>
-    <p class="body-m muted" style="margin-bottom: 32px; line-height: 1.6;">
+    <h2 class="h3-22" id="deniedTitle" style="color: #fff; margin-bottom: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Доступ ограничен</h2>
+    <p class="body-m muted" id="deniedText" style="margin-bottom: 32px; line-height: 1.6;">
       Мы не нашли подтверждения оплаты тест-драйва ИИ-системы для вашего аккаунта. Если вы только что совершили платёж, подождите 1 минуту, пока банк проведёт операцию, и обновите страницу.
     </p>
     <a href="index.html" class="btn-primary" style="display: block; width: 100%; margin-bottom: 16px;">Оплатить тест-драйв (2 990 ₽) ➔</a>
     <button onclick="window.location.reload()" class="btn-primary" style="display: block; width: 100%; margin-bottom: 24px; background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; box-shadow: none !important; color: #fff !important;">🔄 Проверить оплату заново</button>
-    <p class="body-s muted">Возникли проблемы? Напишите нам в поддержку: <a href="mailto:maxtyutin@gmail.com" style="color: #4d8eff; text-decoration: underline;">maxtyutin@gmail.com</a></p>
+    <p class="body-s muted">Возникли проблемы? Напишите в поддержку: <a href="https://t.me/tyutinmax" target="_blank" style="color: #4d8eff; text-decoration: underline;">Telegram</a> | <a href="https://vk.com/tyutinmax" target="_blank" style="color: #4d8eff; text-decoration: underline;">ВКонтакте</a></p>
   </div>
 
   <!-- Content State (visible only if paid) -->
@@ -220,7 +220,7 @@
     </div>
 
     <div class="support-footer">
-      Возникли вопросы по настройке? Напишите нам: <a href="mailto:maxtyutin@gmail.com">maxtyutin@gmail.com</a>
+      Возникли вопросы по настройке? Напишите в поддержку: <a href="https://t.me/tyutinmax" target="_blank" style="color: #4d8eff; text-decoration: underline;">Telegram</a> | <a href="https://vk.com/tyutinmax" target="_blank" style="color: #4d8eff; text-decoration: underline;">ВКонтакте</a>
     </div>
   </div>
 
@@ -235,10 +235,36 @@
           return;
       }
 
-      // Формируем адрес проверки доступа
-      let checkUrl = `/api/check-access?userId=${userId}`;
+      // Генерируем уникальный токен устройства для защиты от пересылки ссылок
+      let deviceToken = localStorage.getItem('ai_hustlers_device_token');
+      if (!deviceToken) {
+          deviceToken = 'dev_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+          localStorage.setItem('ai_hustlers_device_token', deviceToken);
+      }
+
+      // Считываем день программы из URL параметров (по умолчанию 1)
+      const day = urlParams.get('day') || '1';
+
+      // Обновляем заголовок и описание страницы под соответствующий день
+      const pageTitle = document.querySelector('.video-title');
+      const pageDesc = document.querySelector('.video-desc');
+      if (pageTitle && pageDesc) {
+          if (day === '2') {
+              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (2 день)';
+              pageDesc.textContent = 'Создание вашего первого онлайн-продукта, автоворонки и прием автоплатежей.';
+          } else if (day === '3') {
+              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (3 день)';
+              pageDesc.textContent = 'Запуск контент-маркетинга, автогенерации трафика и монетизации с помощью ИИ.';
+          } else {
+              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (1 день)';
+              pageDesc.textContent = 'Пошаговая настройка агентов Claude Code, ChatGPT Codex, Antigravity и MCP.';
+          }
+      }
+
+      // Формируем адрес проверки доступа с передачей дня
+      let checkUrl = `/api/check-access?userId=${userId}&deviceToken=${deviceToken}&day=${day}`;
       if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
-          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}`;
+          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}&deviceToken=${deviceToken}&day=${day}`;
       }
 
       fetch(checkUrl)
@@ -261,6 +287,10 @@
                   document.getElementById('contentState').style.display = 'flex';
               } else {
                   // Если оплата не найдена, показываем экран ограничения доступа
+                  if (data.reason === 'device_limit_exceeded') {
+                      document.getElementById('deniedTitle').textContent = 'Превышен лимит устройств';
+                      document.getElementById('deniedText').textContent = 'Доступ к этому уроку уже был активирован с двух других устройств. Если вы считаете это ошибкой, свяжитесь с поддержкой.';
+                  }
                   document.getElementById('loadingState').style.display = 'none';
                   document.getElementById('deniedState').style.display = 'block';
               }
