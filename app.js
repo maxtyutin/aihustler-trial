@@ -199,6 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
       appForm.addEventListener('submit', async function(e) {
           e.preventDefault();
           
+          // Генерируем НОВЫЙ уникальный userId для каждого нового запроса оплаты, 
+          // чтобы избежать дублирования сессий в ЮKassa и позволить платить повторно!
+          userId = 'user_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+          localStorage.setItem('ai_hustlers_user_id', userId);
+          
           if (iti && phoneInput) {
               phoneInput.value = iti.getNumber();
           }
