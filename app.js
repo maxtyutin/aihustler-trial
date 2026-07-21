@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // НАСТРОЙКА: Ссылка на ваш бэкенд на Render для работы платежей на GitHub Pages
-  const VERCEL_API_URL = "https://aihustler-trial.onrender.com";
+  const VERCEL_API_URL = "https://aihustler-trial-1.onrender.com";
 
   // НАСТРОЙКА: Ключ доступа Web3Forms для отправки заявок на почту
   const WEB3FORMS_ACCESS_KEY = "41bc8576-ffd3-4a5d-bf2f-456a11df1864";
