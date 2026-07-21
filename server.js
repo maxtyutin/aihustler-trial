@@ -26,7 +26,7 @@ app.post('/api/create-payment', async (req, res) => {
   }
 
   const authHeader = 'Basic ' + Buffer.from(SHOP_ID + ':' + SECRET_KEY).toString('base64');
-  const idempotencyKey = crypto.randomUUID();
+  const idempotencyKey = crypto.randomBytes(16).toString('hex');
 
   try {
     const response = await fetch('https://api.yookassa.ru/v3/payments', {
