@@ -2379,3 +2379,24 @@ body.fbz::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px;
 }
+
+
+/* intlTelInput Layout Fixes */
+.iti {
+  width: 100% !important;
+  position: relative !important;
+  display: block !important;
+}
+.iti__country-container {
+  padding: 0 !important;
+}
+.iti__selected-country {
+  padding: 0 8px 0 12px !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  background: transparent !important;
+}
+.iti__flag {
+  border-radius: 2px !important;
+}

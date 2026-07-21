@@ -20,7 +20,7 @@ class PaymentHandler(http.server.SimpleHTTPRequestHandler):
             req = urllib.request.Request(
                 'https://api.yookassa.ru/v3/payments',
                 data=json.dumps({
-                    'amount': {'value': '22990.00', 'currency': 'RUB'},
+                    'amount': {'value': '2990.00', 'currency': 'RUB'},
                     'capture': True,
                     'confirmation': {
                         'type': 'redirect',
