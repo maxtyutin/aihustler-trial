@@ -89,7 +89,8 @@ app.post('/api/yookassa-webhook', (req, res) => {
 // 3. ПРОВЕРКА ДОСТУПА НА САЙТЕ
 // ==========================================
 app.get('/api/check-access', (req, res) => {
-  const { userId, deviceToken } = req.query;
+  const { userId, deviceToken, day } = req.query;
+  const targetDay = day || '1';
 
   if (userId && paidUsers.has(userId)) {
     const userData = paidUsers.get(userId);
@@ -97,20 +98,26 @@ app.get('/api/check-access', (req, res) => {
     if (deviceToken) {
       // Если устройство уже авторизовано
       if (userData.devices.has(deviceToken)) {
-        return res.json({
-          hasAccess: true,
-          videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'
-        });
+        let videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 1 (реальное видео)
+        if (targetDay === '2') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 2 (замените на свое видео)
+        } else if (targetDay === '3') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 3 (замените на свое видео)
+        }
+        return res.json({ hasAccess: true, videoUrl });
       }
 
       // Если лимит устройств (2 устройства) не превышен, привязываем новое
       if (userData.devices.size < 2) {
         userData.devices.add(deviceToken);
         console.log(`[УСТРОЙСТВО] Привязано новое устройство ${deviceToken} к пользователю ${userId}`);
-        return res.json({
-          hasAccess: true,
-          videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'
-        });
+        let videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 1
+        if (targetDay === '2') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 2
+        } else if (targetDay === '3') {
+          videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 3
+        }
+        return res.json({ hasAccess: true, videoUrl });
       }
 
       // Превышен лимит устройств (защита от пересылки)

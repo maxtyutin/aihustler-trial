@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.5.3">
+  <link rel="stylesheet" href="style.css?v=2.6.0">
   <style>
     body.fbz {
       min-height: 100vh;
@@ -242,10 +242,29 @@
           localStorage.setItem('ai_hustlers_device_token', deviceToken);
       }
 
-      // Формируем адрес проверки доступа
-      let checkUrl = `/api/check-access?userId=${userId}&deviceToken=${deviceToken}`;
+      // Считываем день программы из URL параметров (по умолчанию 1)
+      const day = urlParams.get('day') || '1';
+
+      // Обновляем заголовок и описание страницы под соответствующий день
+      const pageTitle = document.querySelector('.video-title');
+      const pageDesc = document.querySelector('.video-desc');
+      if (pageTitle && pageDesc) {
+          if (day === '2') {
+              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (2 день)';
+              pageDesc.textContent = 'Создание вашего первого онлайн-продукта, автоворонки и прием автоплатежей.';
+          } else if (day === '3') {
+              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (3 день)';
+              pageDesc.textContent = 'Запуск контент-маркетинга, автогенерации трафика и монетизации с помощью ИИ.';
+          } else {
+              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (1 день)';
+              pageDesc.textContent = 'Пошаговая настройка агентов Claude Code, ChatGPT Codex, Antigravity и MCP.';
+          }
+      }
+
+      // Формируем адрес проверки доступа с передачей дня
+      let checkUrl = `/api/check-access?userId=${userId}&deviceToken=${deviceToken}&day=${day}`;
       if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
-          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}&deviceToken=${deviceToken}`;
+          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}&deviceToken=${deviceToken}&day=${day}`;
       }
 
       fetch(checkUrl)
