@@ -137,7 +137,8 @@ async function sendTelegramMessage(chatId, text, keyboard) {
         chat_id: chatId,
         text: text,
         parse_mode: 'HTML',
-        reply_markup: keyboard ? { inline_keyboard: keyboard } : undefined
+        reply_markup: keyboard ? { inline_keyboard: keyboard } : undefined,
+        protect_content: true // Запрещает пересылку сообщений бота и копирование контента!
       })
     });
   } catch (err) {
