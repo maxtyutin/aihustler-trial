@@ -20,13 +20,13 @@ class PaymentHandler(http.server.SimpleHTTPRequestHandler):
             req = urllib.request.Request(
                 'https://api.yookassa.ru/v3/payments',
                 data=json.dumps({
-                    'amount': {'value': '990.00', 'currency': 'RUB'},
+                    'amount': {'value': '22990.00', 'currency': 'RUB'},
                     'capture': True,
                     'confirmation': {
                         'type': 'redirect',
                         'return_url': 'https://t.me/ai_hustlers_bot?start=welcome'
                     },
-                    'description': 'Тест-драйв системы AI HUSTLER'
+                    'description': 'Тест-драйв системы AI HUSTLERS'
                 }).encode(),
                 headers={
                     'Authorization': f'Basic {auth_b64}',
