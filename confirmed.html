@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.4.4">
+  <link rel="stylesheet" href="style.css?v=2.4.9">
   <style>
     body.fbz {
       display: flex;
@@ -188,9 +188,8 @@
       </div>
     </div>
 
-    <a href="video.html" class="btn-primary btn-confirmed" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;">Смотреть тест-драйв на сайте ➔</a>
-    <a href="https://t.me/ai_hustlers_sale_bot" target="_blank" class="btn-primary btn-confirmed">Забрать в Telegram ➔</a>
-    <a href="https://vk.com" target="_blank" class="btn-primary btn-confirmed">Забрать в VK ➔</a>
+    <a href="https://t.me/ai_hustlers_sale_bot" target="_blank" class="btn-primary btn-confirmed" id="tgLink">Забрать в Telegram ➔</a>
+    <a href="https://vk.com" target="_blank" class="btn-primary btn-confirmed" id="vkLink">Забрать в VK ➔</a>
 
     <p class="footer-note">
       Ссылка на тест-драйв также отправлена на вашу почту.<br>
@@ -199,11 +198,24 @@
   </div>
 
   <script>
-    // Сохраняем userId в localStorage при успешном редиректе
+    // Извлекаем userId при успешной оплате и динамически подмешиваем в ссылки
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('userId');
     if (userId) {
         localStorage.setItem('ai_hustlers_user_id', userId);
+        
+        // 1. Ссылка для Telegram-бота (передача start параметра)
+        const tgLink = document.getElementById('tgLink');
+        if (tgLink) {
+            tgLink.href = `https://t.me/ai_hustlers_sale_bot?start=${userId}`;
+        }
+        
+        // 2. Ссылка для VK-бота (передача параметра ref для vk-сообществ)
+        const vkLink = document.getElementById('vkLink');
+        if (vkLink) {
+            // Замените YOUR_VK_GROUP_ID на ID вашей группы в ВК
+            vkLink.href = `https://vk.com/im?sel=YOUR_VK_GROUP_ID&ref=${userId}`;
+        }
     }
   </script>
 </body>

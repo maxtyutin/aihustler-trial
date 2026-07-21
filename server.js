@@ -90,7 +90,7 @@ app.get('/api/check-access', (req, res) => {
   if (userId && paidUsers.has(userId)) {
     return res.json({
       hasAccess: true,
-      videoUrl: 'https://kinescope.io/embed/202450873' // 👈 Замените на реальную ссылку платного видео (Kinescope, Bunny, etc.)
+      videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F' // 👈 Замените на реальную ссылку платного видео (Kinescope, Bunny, etc.)
     });
   }
 
