@@ -23,7 +23,7 @@ app.post('/api/create-payment', async (req, res) => {
       },
       body: JSON.stringify({
         amount: {
-          value: '22990.00',
+          value: '2990.00',
           currency: 'RUB'
         },
         capture: true,
