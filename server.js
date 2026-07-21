@@ -168,9 +168,14 @@ app.post('/api/telegram-webhook', async (req, res) => {
       if (paidUsers.has(userId)) {
         await sendTelegramMessage(chatId,
           `<b>Доступ подтвержден!</b> 🎉\n\nОтлично, оплата поступила! Нажмите кнопку ниже для перехода к просмотру тест-драйва:`,
-          [[
-            { text: '🎬 Получить материал', url: `https://maxtyutin.github.io/aihustler-trial/video.html?userId=${userId}` }
-          ]]
+          [
+            [
+              { text: '🎬 Смотреть программу 1 дня', url: `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}` }
+            ],
+            [
+              { text: '✅ Я посмотрел(а)', callback_data: `watched_1_${userId}` }
+            ]
+          ]
         );
       } else {
         if (TELEGRAM_BOT_TOKEN) {
@@ -186,6 +191,71 @@ app.post('/api/telegram-webhook', async (req, res) => {
             });
           } catch (e) {}
         }
+      }
+    } else if (data.startsWith('watched_1_')) {
+      const userId = data.replace('watched_1_', '');
+      // Отправляем пост 2-го дня программы
+      await sendTelegramMessage(chatId,
+        `<b>Переходим к 2-му дню программы!</b> 🚀\n\nОтличная работа! В первом дне мы разобрали настройку агентов Claude Code, Antigravity и MCP.\n\nСегодня мы перейдем к созданию вашего первого онлайн-продукта, автоворонки и приему платежей 24/7 без вашего участия. Нажмите кнопку ниже:`,
+        [
+          [
+            { text: '🎬 Смотреть программу 2 дня', url: `https://maxtyutin.github.io/aihustler-trial/day2.html?userId=${userId}` }
+          ],
+          [
+            { text: '✅ Я посмотрел(а)', callback_data: `watched_2_${userId}` }
+          ]
+        ]
+      );
+      // Гасим часики ожидания кнопки
+      if (TELEGRAM_BOT_TOKEN) {
+        try {
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ callback_query_id: callbackId })
+          });
+        } catch (e) {}
+      }
+    } else if (data.startsWith('watched_2_')) {
+      const userId = data.replace('watched_2_', '');
+      // Отправляем пост 3-го дня программы
+      await sendTelegramMessage(chatId,
+        `<b>Финальный 3-й день программы!</b> 🔥\n\nВы собрали продукт и настроили платежи. Теперь переходим к запуску контент-маркетинга, автогенерации трафика и монетизации с помощью ИИ-агентов. Нажмите кнопку ниже:`,
+        [
+          [
+            { text: '🎬 Смотреть программу 3 дня', url: `https://maxtyutin.github.io/aihustler-trial/day3.html?userId=${userId}` }
+          ],
+          [
+            { text: '✅ Я посмотрел(а)', callback_data: `watched_3_${userId}` }
+          ]
+        ]
+      );
+      if (TELEGRAM_BOT_TOKEN) {
+        try {
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ callback_query_id: callbackId })
+          });
+        } catch (e) {}
+      }
+    } else if (data.startsWith('watched_3_')) {
+      const userId = data.replace('watched_3_', '');
+      // Отправляем финальный пост о наставничестве
+      await sendTelegramMessage(chatId,
+        `<b>Личное наставничество со мной (Максим Тютин)</b> 💎\n\nПоздравляю вас с успешным завершением трёхдневного тест-драйва ИИ-системы! 🎉\n\nЕсли вы хотите под моим личным руководством запустить ИИ-систему на полную мощность, настроить автопилот маркетинга и продаж и выйти на стабильные <b>5000$ в месяц</b>, приглашаю вас в программу индивидуального наставничества.\n\nСтоимость наставничества: <b>100 000 рублей</b>.\n\nКоличество мест сильно ограничено. Пожалуйста, заполните анкету предзаписи ниже, и я свяжусь с вами лично для собеседования:`,
+        [[
+          { text: '📝 Заполнить анкету предзаписи', url: 'https://forms.gle/49ZtS9Xg8aF8Q5Y88' }
+        ]]
+      );
+      if (TELEGRAM_BOT_TOKEN) {
+        try {
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ callback_query_id: callbackId })
+          });
+        } catch (e) {}
       }
     }
     return res.status(200).send('OK');
@@ -214,12 +284,17 @@ app.post('/api/telegram-webhook', async (req, res) => {
     } else {
       // Сценарий: пользователь перешел с ID
       if (paidUsers.has(userId)) {
-        // Оплачено! Отправляем пост с кнопкой получения материалов
+        // Оплачено! Отправляем пост 1-го дня программы
         await sendTelegramMessage(chatId,
-          `<b>Доступ подтвержден!</b> 🎉\n\nПоздравляем! Оплата тест-драйва ИИ-системы успешно получена.\n\nНажмите кнопку ниже, чтобы открыть первый видеоурок и запустить тест-драйв:`,
-          [[
-            { text: '🎬 Получить материал', url: `https://maxtyutin.github.io/aihustler-trial/video.html?userId=${userId}` }
-          ]]
+          `<b>Доступ подтвержден!</b> 🎉\n\nПоздравляем! Оплата тест-драйва ИИ-системы успешно получена.\n\nНажмите кнопку ниже, чтобы начать первый день тест-драйва:`,
+          [
+            [
+              { text: '🎬 Смотреть программу 1 дня', url: `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}` }
+            ],
+            [
+              { text: '✅ Я посмотрел(а)', callback_data: `watched_1_${userId}` }
+            ]
+          ]
         );
       } else {
         // ID есть, но оплата не найдена в памяти
