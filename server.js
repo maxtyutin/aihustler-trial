@@ -90,7 +90,7 @@ app.get('/api/check-access', (req, res) => {
   if (userId && paidUsers.has(userId)) {
     return res.json({
       hasAccess: true,
-      videoUrl: 'https://kinescope.io/embed/202450873' // 👈 Замените на реальную ссылку платного видео (Kinescope, Bunny, etc.)
+      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' // 👈 Замените на реальную ссылку платного видео (Kinescope, Bunny, etc.)
     });
   }
 
