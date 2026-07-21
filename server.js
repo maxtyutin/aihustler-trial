@@ -8,7 +8,8 @@ app.use(express.json());
 
 // Временное хранилище оплативших пользователей в памяти
 // (при перезапуске сервера список сбрасывается, для продакшена лучше подключить Supabase/MongoDB)
-const paidUsers = new Set();
+// Хранилище оплативших пользователей: userId -> { devices: Set }
+const paidUsers = new Map();
 
 const SHOP_ID = process.env.SHOP_ID || "1399769";
 const SECRET_KEY = process.env.SECRET_KEY || "test_UJCZKVoUNWzWbw8cDrhR6lMJm63JWIqfh-tE1WIk3z0";
@@ -74,7 +75,9 @@ app.post('/api/yookassa-webhook', (req, res) => {
   if (event.type === 'notification' && event.event === 'payment.succeeded') {
     const userId = event.object.metadata?.user_id;
     if (userId) {
-      paidUsers.add(userId);
+      if (!paidUsers.has(userId)) {
+        paidUsers.set(userId, { devices: new Set() });
+      }
       console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
     }
   }
@@ -86,13 +89,34 @@ app.post('/api/yookassa-webhook', (req, res) => {
 // 3. ПРОВЕРКА ДОСТУПА НА САЙТЕ
 // ==========================================
 app.get('/api/check-access', (req, res) => {
-  const userId = req.query.userId;
+  const { userId, deviceToken } = req.query;
 
   if (userId && paidUsers.has(userId)) {
-    return res.json({
-      hasAccess: true,
-      videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'
-    });
+    const userData = paidUsers.get(userId);
+
+    if (deviceToken) {
+      // Если устройство уже авторизовано
+      if (userData.devices.has(deviceToken)) {
+        return res.json({
+          hasAccess: true,
+          videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'
+        });
+      }
+
+      // Если лимит устройств (2 устройства) не превышен, привязываем новое
+      if (userData.devices.size < 2) {
+        userData.devices.add(deviceToken);
+        console.log(`[УСТРОЙСТВО] Привязано новое устройство ${deviceToken} к пользователю ${userId}`);
+        return res.json({
+          hasAccess: true,
+          videoUrl: 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'
+        });
+      }
+
+      // Превышен лимит устройств (защита от пересылки)
+      console.log(`[БЛОКИРОВКА] Попытка входа с 3-го устройства для ${userId}`);
+      return res.json({ hasAccess: false, reason: 'device_limit_exceeded' });
+    }
   }
 
   return res.json({ hasAccess: false });
