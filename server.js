@@ -1,15 +1,122 @@
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const { Client } = require('pg');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Временное хранилище оплативших пользователей в памяти
-// (при перезапуске сервера список сбрасывается, для продакшена лучше подключить Supabase/MongoDB)
-// Хранилище оплативших пользователей: userId -> { devices: Set }
-const paidUsers = new Map();
+const DATABASE_URL = process.env.DATABASE_URL;
+let pgClient = null;
+
+// Фолбек: локальная база данных в JSON файле на случай перезапусков контейнера
+const JSON_DB_PATH = path.join(__dirname, 'paid_users.json');
+
+// Загрузка данных из локального файла
+function loadLocalPaidUsers() {
+  try {
+    if (fs.existsSync(JSON_DB_PATH)) {
+      const data = fs.readFileSync(JSON_DB_PATH, 'utf8');
+      const parsed = JSON.parse(data);
+      const map = new Map();
+      for (const [k, v] of Object.entries(parsed)) {
+        map.set(k, { devices: new Set(v.devices || []) });
+      }
+      console.log(`[БД] Успешно загружено ${map.size} пользователей из локального файла.`);
+      return map;
+    }
+  } catch (err) {
+    console.error('Ошибка чтения локальной БД:', err);
+  }
+  return new Map();
+}
+
+// Запись данных в локальный файл
+function saveLocalPaidUsers(map) {
+  try {
+    const obj = {};
+    for (const [k, v] of map.entries()) {
+      obj[k] = { devices: Array.from(v.devices) };
+    }
+    fs.writeFileSync(JSON_DB_PATH, JSON.stringify(obj, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Ошибка записи в локальную БД:', err);
+  }
+}
+
+// Загружаем сохраненных пользователей
+const paidUsers = loadLocalPaidUsers();
+
+// Хелпер добавления оплатившего пользователя
+async function addPaidUser(userId) {
+  if (!paidUsers.has(userId)) {
+    paidUsers.set(userId, { devices: new Set() });
+    saveLocalPaidUsers(paidUsers);
+    
+    if (pgClient) {
+      try {
+        await pgClient.query(
+          'INSERT INTO paid_users (user_id, devices) VALUES ($1, $2) ON CONFLICT (user_id) DO NOTHING',
+          [userId, '{}']
+        );
+      } catch (err) {
+        console.error('Ошибка сохранения пользователя в Postgres:', err);
+      }
+    }
+  }
+}
+
+// Хелпер регистрации нового устройства
+async function registerDevice(userId, deviceToken) {
+  const userData = paidUsers.get(userId);
+  if (userData && !userData.devices.has(deviceToken)) {
+    await registerDevice(userId, deviceToken);
+    saveLocalPaidUsers(paidUsers);
+    
+    if (pgClient) {
+      try {
+        await pgClient.query(
+          'UPDATE paid_users SET devices = array_append(devices, $1) WHERE user_id = $2 AND NOT ($1 = ANY(devices))',
+          [deviceToken, userId]
+        );
+      } catch (err) {
+        console.error('Ошибка добавления устройства в Postgres:', err);
+      }
+    }
+  }
+}
+
+// Подключение к PostgreSQL (если задан в Render)
+if (DATABASE_URL) {
+  pgClient = new Client({
+    connectionString: DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+  pgClient.connect()
+    .then(async () => {
+      console.log('[БД] Успешно подключено к PostgreSQL!');
+      // Создаем таблицу
+      await pgClient.query(`
+        CREATE TABLE IF NOT EXISTS paid_users (
+          user_id VARCHAR(255) PRIMARY KEY,
+          devices TEXT[] DEFAULT '{}'
+        )
+      `);
+      
+      // Синхронизируем пользователей из Postgres в оперативную память
+      const res = await pgClient.query('SELECT * FROM paid_users');
+      res.rows.forEach(row => {
+        paidUsers.set(row.user_id, { devices: new Set(row.devices || []) });
+      });
+      console.log(`[БД] Синхронизировано пользователей из PostgreSQL: ${res.rowCount}`);
+    })
+    .catch(err => {
+      console.error('[БД] Ошибка подключения к PostgreSQL:', err);
+    });
+}
 
 const SHOP_ID = process.env.SHOP_ID || "1399769";
 const SECRET_KEY = process.env.SECRET_KEY || "test_UJCZKVoUNWzWbw8cDrhR6lMJm63JWIqfh-tE1WIk3z0";
@@ -69,15 +176,13 @@ app.post('/api/create-payment', async (req, res) => {
 // ==========================================
 // 2. ВЕБХУК ОТ ЮКАССЫ (подтверждение оплаты)
 // ==========================================
-app.post('/api/yookassa-webhook', (req, res) => {
+app.post('/api/yookassa-webhook', async (req, res) => {
   const event = req.body;
 
   if (event.type === 'notification' && event.event === 'payment.succeeded') {
     const userId = event.object.metadata?.user_id;
     if (userId) {
-      if (!paidUsers.has(userId)) {
-        paidUsers.set(userId, { devices: new Set() });
-      }
+      await addPaidUser(userId);
       console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
     }
   }
@@ -88,7 +193,7 @@ app.post('/api/yookassa-webhook', (req, res) => {
 // ==========================================
 // 3. ПРОВЕРКА ДОСТУПА НА САЙТЕ
 // ==========================================
-app.get('/api/check-access', (req, res) => {
+app.get('/api/check-access', async (req, res) => {
   const { userId, deviceToken, day } = req.query;
   const targetDay = day || '1';
 
@@ -109,7 +214,7 @@ app.get('/api/check-access', (req, res) => {
 
       // Если лимит устройств (2 устройства) не превышен, привязываем новое
       if (userData.devices.size < 2) {
-        userData.devices.add(deviceToken);
+        await registerDevice(userId, deviceToken);
         console.log(`[УСТРОЙСТВО] Привязано новое устройство ${deviceToken} к пользователю ${userId}`);
         let videoUrl = 'https://kinescope.io/embed/33gfSgW8PWuABKPR5eJM9F'; // День 1
         if (targetDay === '2') {
