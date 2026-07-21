@@ -6,13 +6,18 @@ app.use(cors());
 app.use(express.json());
 
 // Временное хранилище оплативших пользователей в памяти
+// (при перезапуске сервера список сбрасывается, для продакшена лучше подключить Supabase/MongoDB)
 const paidUsers = new Set();
 
 // ==========================================
-// 1. ЭНДПОИНТ СОЗДАНИЯ ПЛАТЕЖА (для кнопки на сайте)
+// 1. ЭНДПОИНТ СОЗДАНИЯ ПЛАТЕЖА (2990 руб.)
 // ==========================================
 app.post('/api/create-payment', async (req, res) => {
   const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'Не передан userId' });
+  }
 
   const auth = Buffer.from(`${process.env.SHOP_ID}:${process.env.SECRET_KEY}`).toString('base64');
 
@@ -25,27 +30,38 @@ app.post('/api/create-payment', async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        amount: { value: '990.00', currency: 'RUB' }, // Цена курса
+        amount: { 
+          value: '2990.00', // 👈 Итоговая цена курса
+          currency: 'RUB' 
+        },
         confirmation: {
           type: 'redirect',
-          return_url: `https://maxtyutin.github.io/aihustler-trial/?userId=${userId}` // Куда вернуть пользователя
+          return_url: `https://maxtyutin.github.io/aihustler-trial/?userId=${userId}`
         },
         capture: true,
-        description: 'Оплата курса по Вайб-кодингу',
-        metadata: { user_id: userId }
+        description: 'Оплата трёхдневного тест-драйва системы',
+        metadata: { 
+          user_id: userId 
+        }
       })
     });
 
     const data = await response.json();
-    res.json({ paymentUrl: data.confirmation?.confirmation_url });
+
+    if (data.confirmation && data.confirmation.confirmation_url) {
+      res.json({ paymentUrl: data.confirmation.confirmation_url });
+    } else {
+      console.error('Ошибка ЮKassa:', data);
+      res.status(500).json({ error: 'Не удалось получить ссылку на оплату' });
+    }
   } catch (error) {
-    console.error('Ошибка при создании платежа:', error);
-    res.status(500).json({ error: 'Ошибка сервера' });
+    console.error('Ошибка при запросе к ЮKassa:', error);
+    res.status(500).json({ error: 'Внутренняя ошибка сервера' });
   }
 });
 
 // ==========================================
-// 2. ВЕБХУК ОТ ЮКАССЫ (принимает факт оплаты)
+// 2. ВЕБХУК ОТ ЮКАССЫ (подтверждение оплаты)
 // ==========================================
 app.post('/api/yookassa-webhook', (req, res) => {
   const event = req.body;
@@ -55,24 +71,24 @@ app.post('/api/yookassa-webhook', (req, res) => {
     
     if (userId) {
       paidUsers.add(userId);
-      console.log(`[УСПЕХ] Доступ выдан пользователю: ${userId}`);
+      console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
     }
   }
 
-  // Мгновенно отвечать 200 OK — обязательно для ЮKassa
+  // Мгновенный ответ 200 OK обязателен для ЮKassa
   res.status(200).send('OK');
 });
 
 // ==========================================
-// 3. ПРОВЕРКА ДОСТУПА (для показа видео на сайте)
+// 3. ПРОВЕРКА ДОСТУПА НА САЙТЕ
 // ==========================================
 app.get('/api/check-access', (req, res) => {
   const userId = req.query.userId;
 
-  if (paidUsers.has(userId)) {
+  if (userId && paidUsers.has(userId)) {
     return res.json({ 
       hasAccess: true, 
-      videoUrl: 'https://kinescope.io/embed/YOUR_VIDEO_ID' // Замените на вашу ссылку на видео
+      videoUrl: 'https://kinescope.io/embed/YOUR_VIDEO_ID' // 👈 Замените на вашу ссылку плеера Kinescope или Bunny
     });
   }
 
@@ -80,4 +96,4 @@ app.get('/api/check-access', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+app.listen(PORT, () => console.log(`Сервер вайб-кодинга запущен на порту ${PORT}`));
