@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.4.3">
+  <link rel="stylesheet" href="style.css?v=2.4.4">
   <style>
     body.fbz {
       min-height: 100vh;
@@ -191,9 +191,9 @@
     <h1 class="video-title">Практический тест-драйв ИИ-системы</h1>
     <p class="video-desc">Посмотрите пошаговую инструкцию ниже, чтобы запустить ваших первых автономных ИИ-агентов всего за 1 вечер.</p>
 
-    <div class="player-container">
-      <!-- Изначально пустой тег video, источник подставляется динамически из API -->
-      <video id="videoPlayer" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video>
+    <div class="player-container" id="playerContainer">
+      <!-- Контент плеера (iframe или video) подгружается динамически -->
+      <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #8c909f;">Загрузка плеера...</div>
     </div>
 
     <div class="action-box">
@@ -231,11 +231,14 @@
           })
           .then(data => {
               if (data.hasAccess) {
-                  // Отображаем видеоплеер и скрываем лоадер
-                  const videoPlayer = document.getElementById('videoPlayer');
-                  if (videoPlayer) {
-                      videoPlayer.src = data.videoUrl;
-                      videoPlayer.load();
+                  // Отображаем плеер динамически (iframe для Kinescope/YouTube или video для direct mp4)
+                  const playerContainer = document.getElementById('playerContainer');
+                  if (playerContainer) {
+                      if (data.videoUrl.includes('kinescope.io') || data.videoUrl.includes('youtube.com') || data.videoUrl.includes('vimeo.com')) {
+                          playerContainer.innerHTML = `<iframe src="${data.videoUrl}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer" title="Video Player" allowfullscreen style="width: 100%; height: 100%; border: none;"></iframe>`;
+                      } else {
+                          playerContainer.innerHTML = `<video src="${data.videoUrl}" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video>`;
+                      }
                   }
                   document.getElementById('loadingState').style.display = 'none';
                   document.getElementById('contentState').style.display = 'flex';
