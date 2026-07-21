@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       },
       body: JSON.stringify({
         amount: {
-          value: '990.00',
+          value: '22990.00',
           currency: 'RUB'
         },
         capture: true,
