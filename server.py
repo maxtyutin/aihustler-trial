@@ -26,7 +26,7 @@ class PaymentHandler(http.server.SimpleHTTPRequestHandler):
                         'type': 'redirect',
                         'return_url': 'https://t.me/ai_hustlers_bot?start=welcome'
                     },
-                    'description': 'Тест-драйв системы AI HUSTLER'
+                    'description': 'Тест-драйв системы AI HUSTLERS'
                 }).encode(),
                 headers={
                     'Authorization': f'Basic {auth_b64}',

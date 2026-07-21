@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
           type: 'redirect',
           return_url: 'https://t.me/ai_hustlers_bot?start=welcome'
         },
-        description: 'Тест-драйв системы AI HUSTLER'
+        description: 'Тест-драйв системы AI HUSTLERS'
       })
     });
 
