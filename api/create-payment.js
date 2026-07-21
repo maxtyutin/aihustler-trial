@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       },
       body: JSON.stringify({
         amount: {
-          value: '990.00',
+          value: '2990.00',
           currency: 'RUB'
         },
         capture: true,
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
           type: 'redirect',
           return_url: 'https://t.me/ai_hustlers_bot?start=welcome'
         },
-        description: 'Тест-драйв системы AI HUSTLER'
+        description: 'Тест-драйв системы AI HUSTLERS'
       })
     });
 

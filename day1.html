@@ -205,8 +205,8 @@
       <div class="status-badge">Доступ оплачен</div>
     </div>
 
-    <h1 class="video-title">Практический тест-драйв ИИ-системы</h1>
-    <p class="video-desc">Посмотрите пошаговую инструкцию ниже, чтобы запустить ваших первых автономных ИИ-агентов всего за 1 вечер.</p>
+    <h1 class="video-title">Практический тест-драйв ИИ-системы (1 день)</h1>
+    <p class="video-desc">Пошаговая настройка агентов Claude Code, ChatGPT Codex, Antigravity и MCP.</p>
 
     <div class="player-container" id="playerContainer">
       <!-- Контент плеера (iframe или video) подгружается динамически -->
@@ -230,11 +230,11 @@
       
       const urlParams = new URLSearchParams(window.location.search);
       let userId = urlParams.get('userId');
-      const day = urlParams.get('day') || '1';
+      const day = "1";
 
       if (userId) {
           localStorage.setItem('ai_hustlers_user_id', userId);
-          // Стираем userId и day из адресной строки для безопасности
+          // Стираем userId из адресной строки для безопасности
           window.history.replaceState({}, document.title, window.location.pathname);
       } else {
           userId = localStorage.getItem('ai_hustlers_user_id');
@@ -253,21 +253,7 @@
           localStorage.setItem('ai_hustlers_device_token', deviceToken);
       }
 
-      // Обновляем заголовок и описание страницы под соответствующий день
-      const pageTitle = document.querySelector('.video-title');
-      const pageDesc = document.querySelector('.video-desc');
-      if (pageTitle && pageDesc) {
-          if (day === '2') {
-              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (2 день)';
-              pageDesc.textContent = 'Создание вашего первого онлайн-продукта, автоворонки и прием автоплатежей.';
-          } else if (day === '3') {
-              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (3 день)';
-              pageDesc.textContent = 'Запуск контент-маркетинга, автогенерации трафика и монетизации с помощью ИИ.';
-          } else {
-              pageTitle.textContent = 'Практический тест-драйв ИИ-системы (1 день)';
-              pageDesc.textContent = 'Пошаговая настройка агентов Claude Code, ChatGPT Codex, Antigravity и MCP.';
-          }
-      }
+
 
       // Формируем адрес проверки доступа с передачей дня
       let checkUrl = `/api/check-access?userId=${userId}&deviceToken=${deviceToken}&day=${day}`;
