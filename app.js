@@ -23,78 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  // Функция для разблокировки платного видео на странице
-  function unlockPaidVideo(videoUrl) {
-      const heroVideo = document.getElementById('heroVideo');
-      const videoContainer = document.getElementById('videoContainer');
-      const videoOverlay = document.getElementById('videoOverlay');
-
-      if (heroVideo) {
-          // Меняем источник на платное видео
-          heroVideo.src = videoUrl;
-          heroVideo.load();
-      }
-
-      // Меняем отображение кнопки/бейджей
-      const heroPriceBlock = document.querySelector('.hero-price-block');
-      if (heroPriceBlock) {
-          heroPriceBlock.style.display = 'none';
-      }
-
-      // Меняем кнопки «Начать тест-драйв» на «Смотреть видео»
-      document.querySelectorAll('.open-modal-btn').forEach(btn => {
-          btn.innerHTML = 'Смотреть тест-драйв';
-          btn.removeAttribute('onclick');
-          btn.addEventListener('click', (e) => {
-              e.preventDefault();
-              if (videoOverlay && !videoContainer.classList.contains('playing')) {
-                  videoOverlay.click();
-              }
-              document.getElementById('videoContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          });
-      });
-
-      // Меняем нижнюю плашку на сообщение об успешном доступе
-      const claimSection = document.querySelector('.sec.claim');
-      if (claimSection) {
-          claimSection.innerHTML = `
-              <div class="wrap" style="text-align: center; padding: 40px 20px;">
-                  <h2 class="h2-48 center mb16" style="color: #10b981; font-weight: 800;">ДОСТУП УСПЕШНО ОПЛАЧЕН</h2>
-                  <p class="body-l muted maxw600 mx mb24">Вам открыт полный доступ к трехдневному тест-драйву системы AI HUSTLERS. Смотрите презентацию вверху страницы!</p>
-                  <a href="https://t.me/ai_hustlers_sale_bot" target="_blank" class="btn-primary" style="display: inline-block; max-width: 320px;">Перейти в Telegram-канал ➔</a>
-              </div>
-          `;
-      }
-  }
-
-  // Проверяем доступ на сервере Render с токеном устройства для защиты от шаринга
-  async function checkAccess() {
-      let deviceToken = localStorage.getItem('ai_hustlers_device_token');
-      if (!deviceToken) {
-          deviceToken = 'dev_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
-          localStorage.setItem('ai_hustlers_device_token', deviceToken);
-      }
-
-      let checkUrl = `/api/check-access?userId=${userId}&deviceToken=${deviceToken}`;
-      if (window.location.hostname.includes('github.io') || window.location.protocol === 'file:') {
-          checkUrl = `${VERCEL_API_URL}/api/check-access?userId=${userId}&deviceToken=${deviceToken}`;
-      }
-
-      try {
-          const res = await fetch(checkUrl);
-          if (res.ok) {
-              const data = await res.json();
-              if (data.hasAccess) {
-                  unlockPaidVideo(data.videoUrl);
-              }
-          }
-      } catch (err) {
-          console.error('Ошибка проверки доступа:', err);
-      }
-  }
-
-  // Запускаем проверку доступа при загрузке страницы
-  checkAccess();
+  // По требованию: главная страница сайта (index.html) всегда остается в первоначальном продающем виде как до оплаты.
 
   // РАЗОГРЕВ СЕРВЕРА RENDER (для мгновенного ответа при оплате)
   let pingUrl = '/api/create-payment';
