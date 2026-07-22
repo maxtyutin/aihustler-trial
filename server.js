@@ -163,13 +163,15 @@ async function sendNotificationEmail(subject, details) {
   }
 }
 
-// Генерация стильного HTML-письма для покупателя с метками уникального пользователя
+// Генерация стильного HTML-письма для покупателя с 3 днями программы и ботами
 function generateBuyerEmailHTML(userName, userId) {
   const tgLink = `https://t.me/ai_hustlers_sale_bot?start=${userId}`;
   const vkLink = process.env.VK_GROUP_URL 
     ? `${process.env.VK_GROUP_URL}?ref=${userId}` 
     : `https://vk.me/YOUR_VK_GROUP_ID?ref=${userId}`;
-  const webLink = `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}`;
+  const day1Link = `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}`;
+  const day2Link = `https://maxtyutin.github.io/aihustler-trial/day2.html?userId=${userId}`;
+  const day3Link = `https://maxtyutin.github.io/aihustler-trial/day3.html?userId=${userId}`;
   const displayName = userName && userName !== 'Не указано' ? userName : 'друг';
 
   return `
@@ -215,13 +217,14 @@ function generateBuyerEmailHTML(userName, userId) {
                 <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #8c909f; display: block; margin-bottom: 6px;">🔒 Ваш персональный ID покупателя:</span>
                 <code style="font-family: monospace; font-size: 15px; font-weight: 700; color: #4d8eff; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 6px; display: inline-block;">${userId}</code>
                 <p style="margin: 8px 0 0 0; font-size: 11px; color: #616473; line-height: 1.4;">
-                  Все кнопки ниже содержат ваш уникальный зашифрованный токен. Доступ предоставляется только для вашей учетной записи.
+                  Все ссылки содержат ваш защищенный токен. Доступ предоставляется только для вашей учетной записи.
                 </p>
               </div>
 
-              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 24px; margin-bottom: 32px;">
-                <p style="margin: 0 0 20px 0; font-size: 15px; font-weight: 700; color: #ffffff; text-align: center;">
-                  Выберите, где вам удобнее запустить систему:
+              <!-- Option 1: Bots -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 24px; margin-bottom: 28px;">
+                <p style="margin: 0 0 16px 0; font-size: 15px; font-weight: 700; color: #ffffff; text-align: center;">
+                  1. Запустить пошагового бота в мессенджере:
                 </p>
 
                 <!-- Buttons Table -->
@@ -245,13 +248,39 @@ function generateBuyerEmailHTML(userName, userId) {
                 </table>
               </div>
 
-              <!-- Direct Web Link -->
-              <p style="margin: 0 0 32px 0; font-size: 14px; color: #8c909f; text-align: center; line-height: 1.5;">
-                Или открывайте материалы прямо на сайте с авторизованного устройства:<br>
-                <a href="${webLink}" target="_blank" style="color: #4d8eff; text-decoration: underline; font-weight: 600;">
-                  Открыть 1 день тест-драйва на сайте ➔
-                </a>
-              </p>
+              <!-- Option 2: 3 Days Direct Web Links -->
+              <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 24px; margin-bottom: 32px;">
+                <p style="margin: 0 0 16px 0; font-size: 15px; font-weight: 800; color: #ffffff; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">
+                  2. Или открывайте уроки по дням прямо на сайте:
+                </p>
+
+                <!-- Day 1 Card -->
+                <div style="background: rgba(77, 142, 255, 0.05); border: 1px solid rgba(77, 142, 255, 0.15); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+                  <div style="font-size: 14px; font-weight: 800; color: #4d8eff; margin-bottom: 4px;">📌 ДЕНЬ 1: Установка AI агентов, настройка скиллов и MCP</div>
+                  <div style="font-size: 12px; color: #8c909f; margin-bottom: 12px;">Пошаговый запуск и кастомизация ИИ-ассистентов на вашем компьютере.</div>
+                  <a href="${day1Link}" target="_blank" style="display: inline-block; background: #4d8eff; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px;">
+                    ▶ Смотреть 1 День ➔
+                  </a>
+                </div>
+
+                <!-- Day 2 Card -->
+                <div style="background: rgba(77, 142, 255, 0.05); border: 1px solid rgba(77, 142, 255, 0.15); border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+                  <div style="font-size: 14px; font-weight: 800; color: #4d8eff; margin-bottom: 4px;">📌 ДЕНЬ 2: Создание онлайн-продукта, автоворонка и автоплатежи</div>
+                  <div style="font-size: 12px; color: #8c909f; margin-bottom: 12px;">Сборка воронки, интеграция ЮKassa и подключение автодоставки.</div>
+                  <a href="${day2Link}" target="_blank" style="display: inline-block; background: #4d8eff; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px;">
+                    ▶ Смотреть 2 День ➔
+                  </a>
+                </div>
+
+                <!-- Day 3 Card -->
+                <div style="background: rgba(77, 142, 255, 0.05); border: 1px solid rgba(77, 142, 255, 0.15); border-radius: 12px; padding: 16px;">
+                  <div style="font-size: 14px; font-weight: 800; color: #4d8eff; margin-bottom: 4px;">📌 ДЕНЬ 3: Контент-маркетинг, реклама и монетизация</div>
+                  <div style="font-size: 12px; color: #8c909f; margin-bottom: 12px;">Автогенерация трафика, контент-машина и масштабирование.</div>
+                  <a href="${day3Link}" target="_blank" style="display: inline-block; background: #4d8eff; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px;">
+                    ▶ Смотреть 3 День ➔
+                  </a>
+                </div>
+              </div>
 
             </td>
           </tr>
