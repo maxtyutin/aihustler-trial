@@ -69,11 +69,29 @@ async function addPaidUser(userId) {
   }
 }
 
+// Хелпер проверки оплаты пользователя (память + Postgres)
+async function isUserPaid(userId) {
+  if (!userId) return false;
+  if (paidUsers.has(userId)) return true;
+  if (pgClient) {
+    try {
+      const res = await pgClient.query('SELECT * FROM paid_users WHERE user_id = $1', [userId]);
+      if (res.rows.length > 0) {
+        paidUsers.set(userId, { devices: new Set(res.rows[0].devices || []) });
+        return true;
+      }
+    } catch (err) {
+      console.error('Ошибка проверки пользователя в Postgres:', err);
+    }
+  }
+  return false;
+}
+
 // Хелпер регистрации нового устройства
 async function registerDevice(userId, deviceToken) {
   const userData = paidUsers.get(userId);
   if (userData && !userData.devices.has(deviceToken)) {
-    await registerDevice(userId, deviceToken);
+    userData.devices.add(deviceToken);
     saveLocalPaidUsers(paidUsers);
     
     if (pgClient) {
@@ -197,7 +215,7 @@ app.get('/api/check-access', async (req, res) => {
   const { userId, deviceToken, day } = req.query;
   const targetDay = day || '1';
 
-  if (userId && paidUsers.has(userId)) {
+  if (userId && (await isUserPaid(userId))) {
     const userData = paidUsers.get(userId);
 
     if (deviceToken) {
@@ -270,7 +288,7 @@ app.post('/api/telegram-webhook', async (req, res) => {
 
     if (data.startsWith('check_')) {
       const userId = data.replace('check_', '');
-      if (paidUsers.has(userId)) {
+      if (await isUserPaid(userId)) {
         await sendTelegramMessage(chatId,
           `<b>Доступ подтвержден!</b> 🎉\n\nОтлично, оплата поступила! Нажмите кнопку ниже для перехода к просмотру тест-драйва:`,
           [
@@ -388,7 +406,7 @@ app.post('/api/telegram-webhook', async (req, res) => {
       );
     } else {
       // Сценарий: пользователь перешел с ID
-      if (paidUsers.has(userId)) {
+      if (await isUserPaid(userId)) {
         // Оплачено! Отправляем пост 1-го дня программы
         await sendTelegramMessage(chatId,
           `<b>Доступ подтвержден!</b> 🎉\n\nПоздравляем! Оплата тест-драйва ИИ-системы успешно получена.\n\nНажмите кнопку ниже, чтобы начать первый день тест-драйва:`,
