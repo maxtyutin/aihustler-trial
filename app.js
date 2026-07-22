@@ -251,7 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
                   headers: {
                       'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({ userId: userId })
+                  body: JSON.stringify({
+                      userId: userId,
+                      name: jsonObject.name || '',
+                      email: jsonObject.email || '',
+                      phone: jsonObject.phone || ''
+                  })
               });
 
               // Ждем выполнения обоих запросов одновременно
