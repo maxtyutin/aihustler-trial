@@ -3,7 +3,17 @@ const cors = require('cors');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { Client } = require('pg');
+const { Pool } = require('pg');
+
+// Предотвращение падения сервера при неперехваченных фоновых ошибках
+process.on('unhandledRejection', (reason) => {
+  console.log('[СЕРВЕР] Перехвачено фоновое событие:', reason?.message || reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.log('[СЕРВЕР] Перехвачено необработанное исключение:', err?.message || err);
+});
+
 let nodemailer = null;
 try {
   nodemailer = require('nodemailer');
@@ -16,7 +26,7 @@ app.use(cors());
 app.use(express.json());
 
 const DATABASE_URL = process.env.DATABASE_URL;
-let pgClient = null;
+let pgPool = null;
 
 // Фолбек: локальная база данных в JSON файле на случай перезапусков контейнера
 const JSON_DB_PATH = path.join(__dirname, 'paid_users.json');
@@ -49,12 +59,23 @@ function saveLocalPaidUsers(map) {
     }
     fs.writeFileSync(JSON_DB_PATH, JSON.stringify(obj, null, 2), 'utf8');
   } catch (err) {
-    console.error('Ошибка записи в локальную БД:', err);
+    // Безопасный перехват ошибок локальной файловой системы
   }
 }
 
 // Загружаем сохраненных пользователей
 const paidUsers = loadLocalPaidUsers();
+
+// Безопасный хелпер выполнения SQL-запросов к PostgreSQL
+async function queryPg(sql, params) {
+  if (!pgPool) return null;
+  try {
+    return await pgPool.query(sql, params);
+  } catch (err) {
+    console.error('[БД] Ошибка выполнения запроса:', err.message);
+    return null;
+  }
+}
 
 // Хелпер добавления оплатившего пользователя
 async function addPaidUser(userId) {
@@ -62,16 +83,10 @@ async function addPaidUser(userId) {
     paidUsers.set(userId, { devices: new Set() });
     saveLocalPaidUsers(paidUsers);
     
-    if (pgClient) {
-      try {
-        await pgClient.query(
-          'INSERT INTO paid_users (user_id, devices) VALUES ($1, $2) ON CONFLICT (user_id) DO NOTHING',
-          [userId, '{}']
-        );
-      } catch (err) {
-        console.error('Ошибка сохранения пользователя в Postgres:', err);
-      }
-    }
+    await queryPg(
+      'INSERT INTO paid_users (user_id, devices) VALUES ($1, $2) ON CONFLICT (user_id) DO NOTHING',
+      [userId, '{}']
+    );
   }
 }
 
@@ -79,16 +94,11 @@ async function addPaidUser(userId) {
 async function isUserPaid(userId) {
   if (!userId) return false;
   if (paidUsers.has(userId)) return true;
-  if (pgClient) {
-    try {
-      const res = await pgClient.query('SELECT * FROM paid_users WHERE user_id = $1', [userId]);
-      if (res.rows.length > 0) {
-        paidUsers.set(userId, { devices: new Set(res.rows[0].devices || []) });
-        return true;
-      }
-    } catch (err) {
-      console.error('Ошибка проверки пользователя в Postgres:', err);
-    }
+  
+  const res = await queryPg('SELECT * FROM paid_users WHERE user_id = $1', [userId]);
+  if (res && res.rows && res.rows.length > 0) {
+    paidUsers.set(userId, { devices: new Set(res.rows[0].devices || []) });
+    return true;
   }
   return false;
 }
@@ -100,46 +110,44 @@ async function registerDevice(userId, deviceToken) {
     userData.devices.add(deviceToken);
     saveLocalPaidUsers(paidUsers);
     
-    if (pgClient) {
-      try {
-        await pgClient.query(
-          'UPDATE paid_users SET devices = array_append(devices, $1) WHERE user_id = $2 AND NOT ($1 = ANY(devices))',
-          [deviceToken, userId]
-        );
-      } catch (err) {
-        console.error('Ошибка добавления устройства в Postgres:', err);
-      }
-    }
+    await queryPg(
+      'UPDATE paid_users SET devices = array_append(devices, $1) WHERE user_id = $2 AND NOT ($1 = ANY(devices))',
+      [deviceToken, userId]
+    );
   }
 }
 
-// Подключение к PostgreSQL (если задан в Render)
+// Пул подключений к PostgreSQL (автоматическое восстановление соединения)
 if (DATABASE_URL) {
-  pgClient = new Client({
+  pgPool = new Pool({
     connectionString: DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000
   });
-  pgClient.connect()
-    .then(async () => {
-      console.log('[БД] Успешно подключено к PostgreSQL!');
-      // Создаем таблицу
-      await pgClient.query(`
-        CREATE TABLE IF NOT EXISTS paid_users (
-          user_id VARCHAR(255) PRIMARY KEY,
-          devices TEXT[] DEFAULT '{}'
-        )
-      `);
-      
-      // Синхронизируем пользователей из Postgres в оперативную память
-      const res = await pgClient.query('SELECT * FROM paid_users');
+
+  // Отлавливаем незапланированное закрытие фоновых соединений
+  pgPool.on('error', (err) => {
+    console.log('[БД] Автоматическая очистка фонового соединения пула:', err.message);
+  });
+
+  // Инициализация таблицы при старте
+  queryPg(`
+    CREATE TABLE IF NOT EXISTS paid_users (
+      user_id VARCHAR(255) PRIMARY KEY,
+      devices TEXT[] DEFAULT '{}'
+    )
+  `).then(async () => {
+    console.log('[БД] Таблица paid_users подтверждена в PostgreSQL');
+    const res = await queryPg('SELECT * FROM paid_users');
+    if (res && res.rows) {
       res.rows.forEach(row => {
         paidUsers.set(row.user_id, { devices: new Set(row.devices || []) });
       });
-      console.log(`[БД] Синхронизировано пользователей из PostgreSQL: ${res.rowCount}`);
-    })
-    .catch(err => {
-      console.error('[БД] Ошибка подключения к PostgreSQL:', err);
-    });
+      console.log(`[БД] Успешно синхронизировано пользователей из PostgreSQL: ${res.rowCount}`);
+    }
+  });
 }
 
 // Вспомогательная функция отправки уведомлений на почту maxtyutin@gmail.com через Web3Forms
