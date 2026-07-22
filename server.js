@@ -163,10 +163,12 @@ async function sendNotificationEmail(subject, details) {
   }
 }
 
-// Генерация стильного HTML-письма для покупателя с кнопками Telegram и ВКонтакте
+// Генерация стильного HTML-письма для покупателя с метками уникального пользователя
 function generateBuyerEmailHTML(userName, userId) {
   const tgLink = `https://t.me/ai_hustlers_sale_bot?start=${userId}`;
-  const vkLink = process.env.VK_GROUP_URL || `https://vk.com/im?sel=-YOUR_VK_GROUP_ID`;
+  const vkLink = process.env.VK_GROUP_URL 
+    ? `${process.env.VK_GROUP_URL}?ref=${userId}` 
+    : `https://vk.me/YOUR_VK_GROUP_ID?ref=${userId}`;
   const webLink = `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}`;
   const displayName = userName && userName !== 'Не указано' ? userName : 'друг';
 
@@ -176,7 +178,7 @@ function generateBuyerEmailHTML(userName, userId) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Доступ к тест-драйву AI HUSTLERS</title>
+  <title>Персональный доступ к тест-драйву AI HUSTLERS</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #0b0c10; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #ffffff;">
   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0b0c10; padding: 40px 10px;">
@@ -197,37 +199,46 @@ function generateBuyerEmailHTML(userName, userId) {
               
               <!-- Badge -->
               <div style="display: inline-block; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 30px; padding: 6px 16px; font-size: 12px; font-weight: 700; color: #10b981; text-transform: uppercase; margin-bottom: 24px;">
-                ✓ Оплата получена — 2 990 ₽
+                ✓ Оплата подтверждена — 2 990 ₽
               </div>
 
               <h2 style="margin: 0 0 16px 0; font-size: 22px; font-weight: 800; color: #ffffff; line-height: 1.3;">
                 Здравствуйте, ${displayName}! 🎉
               </h2>
 
-              <p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #a0a5b5;">
-                Поздравляем! Ваш доступ к <b>трёхдневному тест-драйву ИИ-системы AI HUSTLERS</b> успешно активирован.
+              <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #a0a5b5;">
+                Поздравляем! Ваш индивидуальный доступ к <b>трёхдневному тест-драйву ИИ-системы AI HUSTLERS</b> успешно активирован.
               </p>
+
+              <!-- Unique User Token Card -->
+              <div style="background: rgba(77, 142, 255, 0.05); border: 1px dashed rgba(77, 142, 255, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 28px; text-align: center;">
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #8c909f; display: block; margin-bottom: 6px;">🔒 Ваш персональный ID покупателя:</span>
+                <code style="font-family: monospace; font-size: 15px; font-weight: 700; color: #4d8eff; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 6px; display: inline-block;">${userId}</code>
+                <p style="margin: 8px 0 0 0; font-size: 11px; color: #616473; line-height: 1.4;">
+                  Все кнопки ниже содержат ваш уникальный зашифрованный токен. Доступ предоставляется только для вашей учетной записи.
+                </p>
+              </div>
 
               <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 24px; margin-bottom: 32px;">
                 <p style="margin: 0 0 20px 0; font-size: 15px; font-weight: 700; color: #ffffff; text-align: center;">
-                  Выберите, где вам удобнее получить доступ к системе и запустить ИИ-агентов:
+                  Выберите, где вам удобнее запустить систему:
                 </p>
 
                 <!-- Buttons Table -->
                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
                     <td align="center" style="padding-bottom: 12px;">
-                      <!-- Telegram Button -->
-                      <a href="${tgLink}" target="_blank" style="display: block; width: 100%; max-width: 320px; background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3); box-sizing: border-box;">
-                        💬 В Telegram ➔
+                      <!-- Telegram Button with Unique Tag -->
+                      <a href="${tgLink}" target="_blank" style="display: block; width: 100%; max-width: 340px; background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3); box-sizing: border-box;">
+                        💬 В Telegram (персональный доступ) ➔
                       </a>
                     </td>
                   </tr>
                   <tr>
                     <td align="center">
-                      <!-- VK Button -->
-                      <a href="${vkLink}" target="_blank" style="display: block; width: 100%; max-width: 320px; background: linear-gradient(135deg, #0077FF 0%, #0055BB 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); box-sizing: border-box;">
-                        🔷 Во ВКонтакте ➔
+                      <!-- VK Button with Unique Tag -->
+                      <a href="${vkLink}" target="_blank" style="display: block; width: 100%; max-width: 340px; background: linear-gradient(135deg, #0077FF 0%, #0055BB 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); box-sizing: border-box;">
+                        🔷 Во ВКонтакте (персональный доступ) ➔
                       </a>
                     </td>
                   </tr>
@@ -236,9 +247,9 @@ function generateBuyerEmailHTML(userName, userId) {
 
               <!-- Direct Web Link -->
               <p style="margin: 0 0 32px 0; font-size: 14px; color: #8c909f; text-align: center; line-height: 1.5;">
-                Или вы можете открыть 1-й день прямо на нашем сайте:<br>
+                Или открывайте материалы прямо на сайте с авторизованного устройства:<br>
                 <a href="${webLink}" target="_blank" style="color: #4d8eff; text-decoration: underline; font-weight: 600;">
-                  Открыть 1 день тест-драйва ➔
+                  Открыть 1 день тест-драйва на сайте ➔
                 </a>
               </p>
 
@@ -249,8 +260,8 @@ function generateBuyerEmailHTML(userName, userId) {
           <tr>
             <td style="padding: 24px 30px; background-color: #0e0f16; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center;">
               <p style="margin: 0; font-size: 12px; color: #616473; line-height: 1.6;">
-                Если у вас возникнут вопросы по настройке, наша поддержка всегда на связи:<br>
-                Telegram: <a href="https://t.me/tyutinmax" style="color: #4d8eff; text-decoration: none;">@tyutinmax</a> | Email: <a href="mailto:maxtyutin@gmail.com" style="color: #4d8eff; text-decoration: none;">maxtyutin@gmail.com</a>
+                Защищенный персональный доступ AI HUSTLERS.<br>
+                Telegram поддержки: <a href="https://t.me/tyutinmax" style="color: #4d8eff; text-decoration: none;">@tyutinmax</a> | Email: <a href="mailto:maxtyutin@gmail.com" style="color: #4d8eff; text-decoration: none;">maxtyutin@gmail.com</a>
               </p>
             </td>
           </tr>
