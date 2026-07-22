@@ -136,6 +136,27 @@ if (DATABASE_URL) {
     });
 }
 
+// Вспомогательная функция отправки уведомлений на почту maxtyutin@gmail.com через Web3Forms
+async function sendNotificationEmail(subject, details) {
+  const WEB3FORMS_KEY = process.env.WEB3FORMS_ACCESS_KEY || "41bc8576-ffd3-4a5d-bf2f-456a11df1864";
+  try {
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: subject,
+        from_name: 'AI HUSTLERS Payments',
+        to_email: 'maxtyutin@gmail.com',
+        ...details
+      })
+    });
+    console.log(`[ПОЧТА] Уведомление отправлено на maxtyutin@gmail.com: ${subject}`);
+  } catch (err) {
+    console.error('[ПОЧТА] Ошибка отправки уведомления на почту:', err);
+  }
+}
+
 const SHOP_ID = process.env.SHOP_ID || "1399769";
 const SECRET_KEY = process.env.SECRET_KEY || "test_UJCZKVoUNWzWbw8cDrhR6lMJm63JWIqfh-tE1WIk3z0";
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -144,7 +165,7 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 // 1. ЭНДПОИНТ СОЗДАНИЯ ПЛАТЕЖА (2990 руб.)
 // ==========================================
 app.post('/api/create-payment', async (req, res) => {
-  const { userId } = req.body;
+  const { userId, name, email, phone } = req.body;
 
   if (!userId) {
     return res.status(400).json({ error: 'Не передан userId' });
@@ -173,7 +194,10 @@ app.post('/api/create-payment', async (req, res) => {
         },
         description: 'Оплата трёхдневного тест-драйва системы',
         metadata: {
-          user_id: userId
+          user_id: userId,
+          user_name: name || 'Не указано',
+          user_email: email || 'Не указано',
+          user_phone: phone || 'Не указано'
         }
       })
     });
@@ -192,16 +216,51 @@ app.post('/api/create-payment', async (req, res) => {
 });
 
 // ==========================================
-// 2. ВЕБХУК ОТ ЮКАССЫ (подтверждение оплаты)
+// 2. ВЕБХУК ОТ ЮКАССЫ (подтверждение оплаты и отправка писем)
 // ==========================================
 app.post('/api/yookassa-webhook', async (req, res) => {
   const event = req.body;
 
-  if (event.type === 'notification' && event.event === 'payment.succeeded') {
-    const userId = event.object.metadata?.user_id;
-    if (userId) {
-      await addPaidUser(userId);
-      console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
+  if (event.type === 'notification' && event.object) {
+    const obj = event.object;
+    const userId = obj.metadata?.user_id;
+    const name = obj.metadata?.user_name || 'Не указано';
+    const userEmail = obj.metadata?.user_email || 'Не указано';
+    const phone = obj.metadata?.user_phone || 'Не указано';
+    const amountStr = obj.amount ? `${obj.amount.value} ${obj.amount.currency}` : '2990.00 RUB';
+    const timeStr = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
+
+    if (event.event === 'payment.succeeded') {
+      if (userId) {
+        await addPaidUser(userId);
+        console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
+      }
+      // Отправляем письмо на maxtyutin@gmail.com об УСПЕШНОЙ оплате
+      await sendNotificationEmail(`🎉 УСПЕШНАЯ ОПЛАТА: ${amountStr} — AI HUSTLERS`, {
+        "Результат": "✅ УСПЕШНО ОПЛАЧЕНО",
+        "Имя покупателя": name,
+        "Email покупателя": userEmail,
+        "Телефон покупателя": phone,
+        "ID пользователя": userId || 'Не указан',
+        "Сумма платежа": amountStr,
+        "Дата и время (МСК)": timeStr
+      });
+
+    } else if (event.event === 'payment.canceled') {
+      const reason = obj.cancellation_details?.reason || 'Оплата отменена или отклонена банком/пользователем';
+      console.log(`[ОТМЕНА] Оплата отменена для ${userId}. Причина: ${reason}`);
+
+      // Отправляем письмо на maxtyutin@gmail.com о НЕУСПЕШНОЙ оплате
+      await sendNotificationEmail(`❌ НЕУСПЕШНАЯ ОПЛАТА / ОТМЕНА: ${amountStr} — AI HUSTLERS`, {
+        "Результат": "❌ ОТМЕНЕНО / ОШИБКА ОПЛАТЫ",
+        "Причина отмены": reason,
+        "Имя покупателя": name,
+        "Email покупателя": userEmail,
+        "Телефон покупателя": phone,
+        "ID пользователя": userId || 'Не указан',
+        "Сумма": amountStr,
+        "Дата и время (МСК)": timeStr
+      });
     }
   }
 
