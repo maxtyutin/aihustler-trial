@@ -4,6 +4,12 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
+let nodemailer = null;
+try {
+  nodemailer = require('nodemailer');
+} catch (e) {
+  console.log('nodemailer не установлен, будет использован Web3Forms API');
+}
 
 const app = express();
 app.use(cors());
@@ -151,9 +157,181 @@ async function sendNotificationEmail(subject, details) {
         ...details
       })
     });
-    console.log(`[ПОЧТА] Уведомление отправлено на maxtyutin@gmail.com: ${subject}`);
+    console.log(`[ПОЧТА ВЛАДЕЛЬЦА] Уведомление отправлено на maxtyutin@gmail.com: ${subject}`);
   } catch (err) {
-    console.error('[ПОЧТА] Ошибка отправки уведомления на почту:', err);
+    console.error('[ПОЧТА ВЛАДЕЛЬЦА] Ошибка отправки уведомления на почту:', err);
+  }
+}
+
+// Генерация стильного HTML-письма для покупателя с кнопками Telegram и ВКонтакте
+function generateBuyerEmailHTML(userName, userId) {
+  const tgLink = `https://t.me/ai_hustlers_sale_bot?start=${userId}`;
+  const vkLink = process.env.VK_GROUP_URL || `https://vk.com/im?sel=-YOUR_VK_GROUP_ID`;
+  const webLink = `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}`;
+  const displayName = userName && userName !== 'Не указано' ? userName : 'друг';
+
+  return `
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Доступ к тест-драйву AI HUSTLERS</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0b0c10; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #ffffff;">
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0b0c10; padding: 40px 10px;">
+    <tr>
+      <td align="center">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #13141c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+          
+          <!-- Header -->
+          <tr>
+            <td align="center" style="padding: 36px 30px 20px 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+              <h1 style="margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; background: linear-gradient(180deg, #adc6ff 0%, #4d8eff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #4d8eff;">AI HUSTLERS</h1>
+            </td>
+          </tr>
+
+          <!-- Main Content -->
+          <tr>
+            <td style="padding: 36px 30px;">
+              
+              <!-- Badge -->
+              <div style="display: inline-block; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 30px; padding: 6px 16px; font-size: 12px; font-weight: 700; color: #10b981; text-transform: uppercase; margin-bottom: 24px;">
+                ✓ Оплата получена — 2 990 ₽
+              </div>
+
+              <h2 style="margin: 0 0 16px 0; font-size: 22px; font-weight: 800; color: #ffffff; line-height: 1.3;">
+                Здравствуйте, ${displayName}! 🎉
+              </h2>
+
+              <p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #a0a5b5;">
+                Поздравляем! Ваш доступ к <b>трёхдневному тест-драйву ИИ-системы AI HUSTLERS</b> успешно активирован.
+              </p>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 24px; margin-bottom: 32px;">
+                <p style="margin: 0 0 20px 0; font-size: 15px; font-weight: 700; color: #ffffff; text-align: center;">
+                  Выберите, где вам удобнее получить доступ к системе и запустить ИИ-агентов:
+                </p>
+
+                <!-- Buttons Table -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding-bottom: 12px;">
+                      <!-- Telegram Button -->
+                      <a href="${tgLink}" target="_blank" style="display: block; width: 100%; max-width: 320px; background: linear-gradient(135deg, #2AABEE 0%, #229ED9 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3); box-sizing: border-box;">
+                        💬 В Telegram ➔
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center">
+                      <!-- VK Button -->
+                      <a href="${vkLink}" target="_blank" style="display: block; width: 100%; max-width: 320px; background: linear-gradient(135deg, #0077FF 0%, #0055BB 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 15px; padding: 14px 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); box-sizing: border-box;">
+                        🔷 Во ВКонтакте ➔
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Direct Web Link -->
+              <p style="margin: 0 0 32px 0; font-size: 14px; color: #8c909f; text-align: center; line-height: 1.5;">
+                Или вы можете открыть 1-й день прямо на нашем сайте:<br>
+                <a href="${webLink}" target="_blank" style="color: #4d8eff; text-decoration: underline; font-weight: 600;">
+                  Открыть 1 день тест-драйва ➔
+                </a>
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 24px 30px; background-color: #0e0f16; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center;">
+              <p style="margin: 0; font-size: 12px; color: #616473; line-height: 1.6;">
+                Если у вас возникнут вопросы по настройке, наша поддержка всегда на связи:<br>
+                Telegram: <a href="https://t.me/tyutinmax" style="color: #4d8eff; text-decoration: none;">@tyutinmax</a> | Email: <a href="mailto:maxtyutin@gmail.com" style="color: #4d8eff; text-decoration: none;">maxtyutin@gmail.com</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+}
+
+// Отправка красивого письма с кнопками выбора для покупателя
+async function sendBuyerWelcomeEmail(userEmail, userName, userId) {
+  if (!userEmail || userEmail === 'Не указано' || !userEmail.includes('@')) {
+    console.log('[ПОЧТА КЛИЕНТА] Пропуск отправки: email покупателя не указан или некорректен');
+    return;
+  }
+
+  const subject = "Ваш доступ к трёхдневному тест-драйву AI HUSTLERS 🎉";
+  const htmlContent = generateBuyerEmailHTML(userName, userId);
+
+  // 1. Отправка через Nodemailer/SMTP (если настроены переменные окружения SMTP_USER и SMTP_PASS)
+  const SMTP_USER = process.env.SMTP_USER;
+  const SMTP_PASS = process.env.SMTP_PASS;
+  const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const SMTP_PORT = parseInt(process.env.SMTP_PORT || '465');
+
+  if (nodemailer && SMTP_USER && SMTP_PASS) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: SMTP_HOST,
+        port: SMTP_PORT,
+        secure: SMTP_PORT === 465,
+        auth: {
+          user: SMTP_USER,
+          pass: SMTP_PASS
+        }
+      });
+
+      await transporter.sendMail({
+        from: `"AI HUSTLERS" <${SMTP_USER}>`,
+        to: userEmail,
+        subject: subject,
+        html: htmlContent
+      });
+
+      console.log(`[ПОЧТА КЛИЕНТА] Красивое HTML-письмо с кнопками TG/VK отправлено клиенту ${userEmail} через SMTP!`);
+      return;
+    } catch (err) {
+      console.error('[ПОЧТА КЛИЕНТА] Ошибка отправки через SMTP, проработка резервного маршрута Web3Forms:', err);
+    }
+  }
+
+  // 2. Резервный маршрут Web3Forms (отправка прямых кнопок и ссылок доступа на почту покупателя)
+  const WEB3FORMS_KEY = process.env.WEB3FORMS_ACCESS_KEY || "41bc8576-ffd3-4a5d-bf2f-456a11df1864";
+  try {
+    const tgLink = `https://t.me/ai_hustlers_sale_bot?start=${userId}`;
+    const vkLink = process.env.VK_GROUP_URL || `https://vk.com/im?sel=-YOUR_VK_GROUP_ID`;
+    const webLink = `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}`;
+
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: `[ИНСТРУКЦИЯ КЛИЕНТУ] ${subject}`,
+        from_name: 'AI HUSTLERS Delivery',
+        to_email: userEmail,
+        "Имя покупателя": userName || 'Не указано',
+        "Email покупателя": userEmail,
+        "Кнопка 1 (В Telegram)": tgLink,
+        "Кнопка 2 (Во ВКонтакте)": vkLink,
+        "Прямой доступ на сайте": webLink,
+        "Сообщение": `Поздравляем с успешной оплатой! Выберите, где забрать материалы: Telegram: ${tgLink} или VK: ${vkLink}`
+      })
+    });
+    console.log(`[ПОЧТА КЛИЕНТА] Инструкция с кнопками для покупателя ${userEmail} отправлена через Web3Forms!`);
+  } catch (err) {
+    console.error('[ПОЧТА КЛИЕНТА] Ошибка отправки письма покупателю через Web3Forms:', err);
   }
 }
 
@@ -235,7 +413,7 @@ app.post('/api/yookassa-webhook', async (req, res) => {
         await addPaidUser(userId);
         console.log(`[УСПЕХ] Оплата 2990 руб. получена! Доступ выдан для: ${userId}`);
       }
-      // Отправляем письмо на maxtyutin@gmail.com об УСПЕШНОЙ оплате
+      // 1. Отправляем уведомление владельцу (maxtyutin@gmail.com)
       await sendNotificationEmail(`🎉 УСПЕШНАЯ ОПЛАТА: ${amountStr} — AI HUSTLERS`, {
         "Результат": "✅ УСПЕШНО ОПЛАЧЕНО",
         "Имя покупателя": name,
@@ -245,6 +423,9 @@ app.post('/api/yookassa-webhook', async (req, res) => {
         "Сумма платежа": amountStr,
         "Дата и время (МСК)": timeStr
       });
+
+      // 2. Отправляем красивое HTML-письмо с кнопками Telegram и ВКонтакте самому ПОКУПАТЕЛЮ!
+      await sendBuyerWelcomeEmail(userEmail, name, userId);
 
     } else if (event.event === 'payment.canceled') {
       const reason = obj.cancellation_details?.reason || 'Оплата отменена или отклонена банком/пользователем';
