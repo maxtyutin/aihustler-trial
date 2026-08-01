@@ -244,7 +244,7 @@ const FinalShader = {
       float md = smoothstep(-0.7, 1., -uv.y*uv.x); flame *= md*md;
       vec3 bg = uBg * (1.0 - 0.4 * length(uv));
       vec3 halo = texture2D(haloTexture, vUv).xyz;
-      gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + torusTexture != null ? texture2D(torusTexture, vUv).xyz : vec3(0.0) + texture2D(tDiffuse, vUv).xyz + halo, 1.);
+      gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + texture2D(torusTexture, vUv).xyz + texture2D(tDiffuse, vUv).xyz + halo, 1.);
     }
   `
 };
