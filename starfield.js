@@ -7,20 +7,20 @@ import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShade
 import { CopyShader } from 'three/addons/shaders/CopyShader.js';
 
 // Fixed parameters
-const bgColor       = '#02160c';   // FinalPass background tint
+const bgColor       = '#052818';   // Rich dark emerald background tint
 const flameColor    = '#0aff7f';   // corner-flame A
 const flameColor2   = '#aef0c0';   // corner-flame B
-const flameAmt      = 0.2;         // corner-flame intensity
+const flameAmt      = 0.55;        // corner-flame intensity
 const atmoColor     = '#7affbf';   // ambient motes color
-const atmoCount     = 300;         // mote count
-const atmoSize      = 24;          // mote base size
+const atmoCount     = 350;         // mote count
+const atmoSize      = 28;          // mote base size
 const atmoSpeed     = 1.0;         // mote warp speed
-const colorLow      = '#02160c';   // points low color
+const colorLow      = '#054828';   // points low color
 const colorHigh     = '#34e89a';   // points high color
-const opacity       = 0.26;        // point opacity
-const pointSize     = 5.5;         // point base size
-const brightness    = 0.45;        // point color multiplier
-const waveHeight    = 3;           // base swell amplitude
+const opacity       = 0.75;        // point opacity
+const pointSize     = 8.5;         // point base size
+const brightness    = 1.25;        // point color multiplier
+const waveHeight    = 3.5;         // base swell amplitude
 const flow          = 1;           // noise scroll speed
 const tilt          = 0;           // sheet X rotation (negated)
 const scale         = 0.275;       // shrinks the sheet to frame
@@ -46,10 +46,13 @@ function hexToVec3(hex) {
 const style = document.createElement('style');
 style.textContent = `
   html {
-    background-color: #000 !important;
+    background-color: #02160c !important;
   }
   body, body.fbz {
     background-color: transparent !important;
+  }
+  body.fbz::before, body.fbz::after {
+    display: none !important;
   }
   .glow-bg {
     display: none !important;
@@ -128,7 +131,7 @@ const waveMat = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
     uStream: { value: 0 },
-    uAppear: { value: 0 },
+    uAppear: { value: 1.0 },
     uColLow: { value: hexToVec3(colorLow) },
     uColHigh: { value: hexToVec3(colorHigh) },
     uOpacity: { value: opacity },
