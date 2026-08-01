@@ -208,9 +208,9 @@ const FinalShader = {
     torusTexture: { value: null },
     bloomTexture: { value: null },
     haloTexture:  { value: null },
-    uBg:       { value: { value: hexToVec3(CONFIG.bgColor) } },
-    uFlameA:   { value: { value: hexToVec3(CONFIG.flameColor) } },
-    uFlameB:   { value: { value: hexToVec3(CONFIG.flameColor2) } },
+    uBg:       { value: hexToVec3(CONFIG.bgColor) },
+    uFlameA:   { value: hexToVec3(CONFIG.flameColor) },
+    uFlameB:   { value: hexToVec3(CONFIG.flameColor2) },
     uFlameAmt: { value: CONFIG.flameAmt }
   },
   vertexShader: `
@@ -248,10 +248,6 @@ const FinalShader = {
     }
   `
 };
-
-FinalShader.uniforms.uBg.value = hexToVec3(CONFIG.bgColor);
-FinalShader.uniforms.uFlameA.value = hexToVec3(CONFIG.flameColor);
-FinalShader.uniforms.uFlameB.value = hexToVec3(CONFIG.flameColor2);
 
 const finalPass = new ShaderPass(FinalShader);
 finalPass.uniforms.bloomTexture.value = bloomComposer.renderTarget1.texture;
