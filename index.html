@@ -1,616 +1,808 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Практический тест-драйв. Узнайте, как создать свой мини-продукт за 1 вечер с помощью AI и зарабатывать на его продаже от 5000$ без вашего участия.">
-  <title>AI Hustlers — Трехдневный тест-драйв системы создания продуктов за 2 990 ₽</title>
+  <title>The Statue of Laocoön</title>
   
-  <!-- Preload fonts and styles -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.7.2">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/css/intlTelInput.css">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF631F'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/></svg>">
-  <!-- Three.js Starfield Background -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@1,500&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+    html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #000000;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    body {
+        min-height: 900vh;
+        font-family: 'Outfit', sans-serif;
+        color: #ffffff;
+        overflow-x: hidden;
+        cursor: none;
+    }
+
+    * { cursor: none !important; }
+
+    ::-webkit-scrollbar { display: none; width: 0; }
+
+    #webgl {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 1;
+        outline: none;
+    }
+
+    .cursor-inner {
+        position: fixed; top: 0; left: 0;
+        width: 6px; height: 6px;
+        border: 2px solid rgba(255, 255, 255, 1);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9999;
+    }
+    .cursor-outer {
+        position: fixed; top: 0; left: 0;
+        width: 40px; height: 40px;
+        border: 1.5px solid rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9998;
+        transition: width 0.3s, height 0.3s, background 0.3s;
+    }
+
+    .cinematic-container {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 10;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0 60px 40px 60px;
+        box-sizing: border-box;
+    }
+
+    .main-header {
+        display: flex; justify-content: space-between; align-items: center;
+        width: 100%; z-index: 20;
+        pointer-events: auto;
+        padding: 20px 0;
+    }
+    .brand { font-size: 14px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; }
+    .header-nav { display: flex; align-items: center; gap: 24px; }
+    .nav-link {
+        color: #ffffff; text-decoration: none;
+        font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+        font-weight: 500; transition: color 0.3s;
+    }
+    .nav-link:hover { color: #ffffff; }
+    .nav-dot { width: 3px; height: 3px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; }
+    .contact-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 24px;
+        background: #ffffff; color: #000000;
+        text-decoration: none;
+        font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+        border-radius: 20px;
+        transition: transform 0.3s, background 0.3s;
+    }
+    .btn-circle {
+        display: inline-block; width: 6px; height: 6px;
+        border: 1px solid #000000; border-radius: 50%; background: transparent;
+    }
+    .contact-btn:hover { transform: scale(1.05); background: #f0f0f0; }
+
+    .slide { position: absolute; bottom: 12%; pointer-events: none; }
+
+    #slide-1 { left: 0; width: 100%; }
+    #slide-1 .slide-title { margin-left: 60px; }
+    #slide-1 .desc-row { position: relative; display: flex; width: 100%; }
+    #slide-1 .col-1 {
+        margin-left: 60px;
+        width: calc(25vw - 60px);
+        max-width: calc(25vw - 60px);
+    }
+    #slide-1 .col-2 {
+        position: absolute;
+        left: calc(25vw + 40px);
+        width: calc(25vw - 60px);
+        max-width: calc(25vw - 60px);
+    }
+
+    #slide-2 { left: 0; width: 100%; }
+    #slide-2-img {
+        position: fixed;
+        top: 90px;
+        left: 60px;
+        width: calc(25vw - 60px);
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        z-index: 2;
+        pointer-events: none;
+        clip-path: inset(0 0 100% 0);
+        transition: clip-path 1.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+        opacity: 0;
+    }
+    #slide-2-img img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transform: scale(1.15);
+        transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #slide-2-img.active { clip-path: inset(0 0 0 0); opacity: 1; }
+    #slide-2-img.active img { transform: scale(1); }
+
+    #slide-2 .slide-title { margin-left: calc(25vw + 40px); }
+    #slide-2 .slide-desc {
+        margin-left: calc(50vw + 20px);
+        width: calc(25vw - 60px);
+        max-width: calc(25vw - 60px);
+    }
+
+    #slide-3 {
+        left: calc(50vw + 20px);
+        width: calc(25vw - 60px);
+        max-width: calc(25vw - 60px);
+    }
+    #slide-3 .slide-title { white-space: nowrap; }
+
+    #slide-4 { left: calc(25% + 40px); max-width: 600px; }
+
+    .slide-title {
+        font-family: 'Italiana', serif;
+        font-size: 116px;
+        line-height: 1.0;
+        font-weight: 400;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        color: #fff6ed;
+    }
+    .slide-desc {
+        font-size: 16px; line-height: 1.7; font-weight: 300;
+        color: #d1d5db; letter-spacing: 0.5px;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                    transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        transition-delay: 0.4s;
+    }
+    .slide.active .slide-desc { opacity: 1; transform: translateY(0); }
+
+    .slide-title .char {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(50px);
+        filter: blur(12px);
+        transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                    transform 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                    filter 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .slide.active .slide-title .char { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .slide.active { pointer-events: auto; }
+
+    .story-dashes {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex; flex-direction: column; gap: 12px;
+    }
+    .story-dash { width: 2px; height: 40px; background: rgba(255, 255, 255, 0.15); border-radius: 2px; }
+    .story-dash-fill { width: 100%; height: 0%; background: #ffffff; border-radius: 2px; }
+
+    .grid-horizontal-line {
+        position: fixed; top: 70px; left: 0; right: 0;
+        width: 100%; height: 1px;
+        background: rgba(255, 255, 255, 0.12);
+        z-index: 5; pointer-events: none;
+    }
+    .grid-lines {
+        position: fixed; top: 0; left: 40px; right: 40px;
+        width: calc(100% - 80px); height: 100vh;
+        display: flex; justify-content: space-between;
+        z-index: 5; pointer-events: none;
+    }
+    .grid-line {
+        position: relative; width: 1px; height: 100%;
+        background: rgba(255, 255, 255, 0.12);
+    }
+    .grid-line:nth-child(3) { margin-top: 70px; height: calc(100vh - 70px); }
+    .grid-dot {
+        position: absolute; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6px; height: 6px; border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+    }
+  </style>
+
   <script type="importmap">
   {
     "imports": {
-      "three": "https://unpkg.com/three@0.143.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.143.0/examples/jsm/"
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/examples/jsm/loaders/GLTFLoader.js": "https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js"
     }
   }
   </script>
-  <script type="module" src="starfield.js"></script>
 </head>
-<body class="fbz">
+<body>
 
-  <!-- Background decorative glows -->
-  <div class="glow-bg">
-    <div class="glow-circle glow-orange glow-top-left"></div>
-    <div class="glow-circle glow-purple glow-top-right"></div>
-    <div class="glow-circle glow-purple glow-mid-left"></div>
-    <div class="glow-circle glow-orange glow-mid-right"></div>
-    <div class="glow-circle glow-orange glow-low-left"></div>
-    <div class="glow-circle glow-purple glow-low-right"></div>
-    <div class="glow-circle glow-orange glow-bottom-left"></div>
-  </div>
+  <div class="cursor-inner"></div>
+  <div class="cursor-outer"></div>
 
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="wrap">
-      <span class="tag-eyebrow">AI HUSTLERS · ТЕСТ-ДРАЙВ ЗА 2 990 ₽</span>
-      <h1 class="display">Трёхдневный <span class="text-gradient">тест-драйв</span> системы</h1>
-      <p class="sub body-l">Благодаря которой ты уже сегодня создашь свой онлайн-продукт, а через 3-4 недели выйдешь на стабильные 5000$ в месяц</p>
-      
-      <div class="chips">
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          Без знания кода
-        </span>
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          Без вложений
-        </span>
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          Без опыта
-        </span>
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          1 вечер на запуск
-        </span>
-      </div>
-
-      <!-- Video Player container -->
-      <div class="video-wrap" id="videoContainer">
-        <div class="video-overlay" id="videoOverlay">
-          <div class="play-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36">
-              <path d="M8 5V19L19 12L8 5Z"/>
-            </svg>
-          </div>
-          <span class="video-duration">10:42</span>
-          <span class="video-hint">Нажмите, чтобы включить презентацию</span>
-        </div>
-        <video id="heroVideo" src="hero-video.mp4" controls preload="metadata"></video>
-      </div>
-
-      <div class="hero-price-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 32px auto 24px auto; text-align: center; font-family: 'Space Grotesk', 'Outfit', 'Manrope', sans-serif;">
-        <span class="was-price" style="text-decoration: line-through; color: #ff4d4d; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em;">150 000 ₽</span>
-        <span class="now-price" style="color: #10b981; font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;">2 990 ₽</span>
-        <span class="timer-text" style="color: #4d8eff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
-        <span class="label-text" style="color: #8c909f; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px;">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
-      </div>
-      
-      <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
-
-      <div class="proof">
-        <div class="avs">
-          <img class="av av-1" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Ученик 1">
-          <img class="av av-2" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80" alt="Ученик 2">
-          <img class="av av-3" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=100&h=100&q=80" alt="Ученик 3">
-        </div>
-        <span class="tp">
-          <span class="tp-star">
-            <svg viewBox="0 0 24 24" width="15" height="15">
-              <polygon fill="#fff" points="12,3 14.6,9.1 21.2,9.6 16.2,13.9 17.8,20.4 12,16.8 6.2,20.4 7.8,13.9 2.8,9.6 9.4,9.1"></polygon>
-            </svg>
-          </span>
-          <b class="tp-name">Оценка 4.9/5</b>
-          <span class="body-s muted tp-meta">Более 100 учеников</span>
-        </span>
-      </div>
-      
-    </div>
-  </header>
-
-  <!-- Value Stack Section -->
-  <div class="wrap"><div class="divider"></div></div>
-
-  <!-- Explanation Section -->
-  <!-- Why the model works -->
-  <section id="why" class="sec band">
-    <div class="wrap">
-      <div class="eyebrow center mb16">Бизнес-модель</div>
-      <h2 class="h2-48 center mb14">Почему эта <span class="text-gradient">система работает</span>?</h2>
-      <p class="body-l muted mx maxw600 mb48 center">Вам не нужно быть блогером или закупать дорогостоящий товар из Китая, для работы всего лишь нужен только ноутбук и интернет.</p>
-      
-      <div class="g3 whyg">
-        <!-- Card 1 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                <circle cx="12" cy="12" r="2.5"></circle>
-                <path d="M6 12h.01M18 12h.01"></path>
-              </svg>
-            </span>
-            <span class="whynum">01</span>
-          </div>
-          <h3 class="h3-22 mb12">Без лица</h3>
-          <p class="body-m muted m0">Вам не нужно вести личный блог или снимать себя на камеру</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3v4M12 17v4M3 12h4M17 12h4"></path>
-              </svg>
-            </span>
-            <span class="whynum">02</span>
-          </div>
-          <h3 class="h3-22 mb12">Без вложений</h3>
-          <p class="body-m muted m0">Вам не нужно закупать товар или дорогие подписки на сервисы, все что вам нужно это ноутбук и интернет</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 15 15"></polyline>
-              </svg>
-            </span>
-            <span class="whynum">03</span>
-          </div>
-          <h3 class="h3-22 mb12">Запуск за 1 вечер</h3>
-          <p class="body-m muted m0">Современные ИИ-инструменты позволяют пройти путь от идеи до готового к продажам продукта всего за несколько часов</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="12" rx="1.5"></rect>
-                <path d="M2 20h20"></path>
-              </svg>
-            </span>
-            <span class="whynum">04</span>
-          </div>
-          <h3 class="h3-22 mb12">Полностью удаленно</h3>
-          <p class="body-m muted m0">Управляйте всей системой из любой точки мира, тратя всего пару часов в неделю</p>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="8" width="16" height="11" rx="2"></rect>
-                <path d="M12 8V4M9 13h.01M15 13h.01"></path>
-              </svg>
-            </span>
-            <span class="whynum">05</span>
-          </div>
-          <h3 class="h3-22 mb12">Вся рутина на нейросетях</h3>
-          <p class="body-m muted m0">ИИ берет на себя рутину: от написания текстов и дизайна до генерации контента и автоматических продаж</p>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 17l6-6 4 4 7-7M14 7h6v6"></path>
-              </svg>
-            </span>
-            <span class="whynum">06</span>
-          </div>
-          <h3 class="h3-22 mb12">Регулярный доход</h3>
-          <p class="body-m muted m0">Благодаря трафику и настроеной автоворонки, вы получаете регулярные продажи ежедневно</p>
-        </div>
-
-        <!-- Card 7 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-              </svg>
-            </span>
-            <span class="whynum">07</span>
-          </div>
-          <h3 class="h3-22 mb12">Без опыта</h3>
-          <p class="body-m muted m0">Система проста и понятна. Вам не нужно быть профессиональным маркетологом, дизайнером или программистом, чтобы начать</p>
-        </div>
-
-        <!-- Card 8 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </span>
-            <span class="whynum">08</span>
-          </div>
-          <h3 class="h3-22 mb12">Без команды</h3>
-          <p class="body-m muted m0">Вам не нужно платить им зарплату или снимать офис</p>
-        </div>
-
-        <!-- Card 9 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 2l3 3-3 3M4 11V9a4 4 0 0 1 4-4h12"></path>
-              </svg>
-            </span>
-            <span class="whynum">09</span>
-          </div>
-          <h3 class="h3-22 mb12">Продажи без вас</h3>
-          <p class="body-m muted m0">С помощью автоворнки клиенты идут автоматически, ваш продукт после оплаты автоматически отправляется им 24/7</p>
-        </div>
+  <div class="cinematic-container">
+    <div class="main-header">
+      <div class="brand">Laocoön</div>
+      <nav class="header-nav">
+        <a href="#slide-1" class="nav-link">Bronze</a>
+        <span class="nav-dot"></span>
+        <a href="#slide-2" class="nav-link">Marble</a>
+        <span class="nav-dot"></span>
+        <a href="#slide-3" class="nav-link">Fluid</a>
+        <span class="nav-dot"></span>
+        <a href="#slide-4" class="nav-link">Digital</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="contact-btn">Contact <span class="btn-circle"></span></a>
       </div>
     </div>
-  </section>
 
-    <!-- Detailed program section -->
-  <section id="program" class="sec band">
-    <div class="wrap">
-      <div class="eyebrow center mb16">Тест-драйв</div>
-      <h2 class="h2-48 center mb48"><span class="text-gradient">Программа</span> тест-драйва</h2>
-      
-      <div class="g3 program-grid">
-        <div class="program-card animate-on-hover">
-          <div class="feat-img-container">
-            <div class="module-banner banner-m1">
-              <div class="banner-decor"></div>
-              <div class="banner-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M9 17h6M12 2v2M5.22 5.22l1.42 1.42M18.78 5.22l-1.42 1.42M12 6a6 6 0 0 0-6 6c0 1.66.7 3.13 1.8 4.17A2 2 0 0 1 8.5 19h7a2 2 0 0 1 .7-2.83 6 6 0 0 0 1.8-4.17 6 6 0 0 0-6-6z"/></svg>
-              </div>
-              <div class="banner-title">
-                <span class="title-bold">Day 1</span>
-                <span class="title-serif">AI Agents & MCP</span>
-              </div>
-            </div>
-          </div>
-          <div class="feat-body">
-            <div class="prog-badge">1 день</div>
-            <h3 class="h3-22 mb10">Установка AI агентов, настройка скиллов и MCP</h3>
-            <p class="body-m muted">Установите и настроите Claude Code, ChatGPT Codex, Antigravity, Hermes, OpenCode, VSCode с самыми передовыми моделями: Gemini, Sonnet, Opus, GPT и др., даже если вы находитесь в странах СНГ. Настроите к ним полезные навыки: Discovery Interview, Fullstack Developer, React, Remotion, ui-ux-pro-max и др, а также подключите полезные MCP: context7, playwright и др.</p>
-          </div>
-        </div>
-        
-        <div class="program-card animate-on-hover">
-          <div class="feat-img-container">
-            <div class="module-banner banner-m2">
-              <div class="banner-decor-radial"></div>
-              <div class="banner-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
-              </div>
-              <div class="banner-title">
-                <span class="title-bold">Day 2</span>
-                <span class="title-serif">Product & Pay</span>
-              </div>
-            </div>
-          </div>
-          <div class="feat-body">
-            <div class="prog-badge">2 день</div>
-            <h3 class="h3-22 mb10">Создание онлайн-продукта, автоворонка и автоплатежи</h3>
-            <p class="body-m muted">AI агент, даже если вы полный 0 и ни в чем не разбираетесь, создаст вам ваш первый качественный онлайн-продукт с профессиональным сайтом или мобильным приложением, настроит в нём автоворонку и вы сможете принимать платежи от будущих клиентов 24/7 по всему миру и даже без вашего участия. Вам достаточно лишь написать или проговорить голосом вашему ИИ агенту идею вашего будущего онлайн-продукта и он её реализует за несколько минут и совсем бесплатно.</p>
-          </div>
-        </div>
-        
-        <div class="program-card animate-on-hover">
-          <div class="feat-img-container">
-            <div class="module-banner banner-m3">
-              <div class="banner-decor"></div>
-              <div class="banner-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-              </div>
-              <div class="banner-title">
-                <span class="title-bold">Day 3</span>
-                <span class="title-serif">Traffic & Ads</span>
-              </div>
-            </div>
-          </div>
-          <div class="feat-body">
-            <div class="prog-badge">3 день</div>
-            <h3 class="h3-22 mb10">Контент-маркетинг, реклама и монетизация</h3>
-            <p class="body-m muted">AI агент напишет вам контент-план, сценарии о вашем продукте, сгенерирует и опубликует продающие статьи, фото и видеоконтент, настроит рекламу в Яндекс Директ, Вк рекламе, Авито или в Meta, TikTok и Google Ads как профессиональный маркетолог-таргетолог, после этого вы гарантированно начнете получать ежедневно новых клиентов, которые будут платить вам за ваш продукт.</p>
-          </div>
-        </div>
+    <div class="slide" id="slide-1">
+      <h2 class="slide-title">Bronze <br>and Time</h2>
+      <div class="desc-row">
+        <p class="slide-desc col-1">A timeless material holding centuries of human history. Fluid in hot flames, eternal in its form. Each curve captures a tense, dramatic moment.</p>
+        <p class="slide-desc col-2">Born of molten fire and creative will, it stands to bridge our ancient memory and modern vision. A fluid energy frozen in still, heavy bronze.</p>
       </div>
     </div>
-  </section>
 
-
-
-  <!-- Results Section -->
-  <section class="sec band">
-    <div class="wrap">
-      <div class="eyebrow center mb16">Результаты участников</div>
-      <h2 class="h2-48 center mb48"><span class="text-gradient">Результаты</span> учеников</h2>
-      
-
-                        <div class="g3 reviews-grid">
-        <!-- Card 1 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="student-1.jpg" alt="Илья С." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Илья С.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«За вечер собрал свой первый мини-продукт по психологии с помощью ИИ, настроил автоворонку за час. В первый же день пошли переходы, и к концу недели я получил 4 продажи по 2 990 ₽! Абсолютно пассивный доход, система действительно работает!»</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="student-2.jpg" alt="Анна К." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Анна К.</div>
-              <div class="review-status">Ученица</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Я вообще не умею программировать, но ИИ-агенты сделали всё за меня: от сборки курса до приёма платежей. Запустила рекламу, и через два дня пошли первые продажи. За неделю заработала 17 940 ₽ на продаже своего мини-продукта!»</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="student-3.jpg" alt="Сергей М." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Сергей М.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«За три дня разобрался в инструментах, создал продукт в нише фитнеса, подключил автоплатежи и запустил рекламу. Автоворонка сама прогревает и продает 24/7. Уже получил 6 продаж моего курса питания на 30 000 рублей»</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&h=150&q=80" alt="Елена В." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Елена В.</div>
-              <div class="review-status">Ученица</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Раньше потратила бы месяцы и сотни тысяч рублей на веб-разработчиков и копирайтеров. Благодаря тест-драйву AI HUSTLERS за 2 дня сделала свой цифровой гайд по здоровому питанию. В первый же день получила 3 оплаты по 2 990 ₽! Это какой-то космос!»</p>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&h=150&q=80" alt="Дмитрий П." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Дмитрий П.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Всегда думал, что запуск своего онлайн-продукта — это сложно. Но ИИ-агенты буквально за 15 минут собрали мне готовый сайт и подключили автоворонку. За первую неделю пришло 8 клиентов без моего прямого участия!»</p>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&h=150&q=80" alt="Максим Г." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Максим Г.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Окупил тест-драйв в 10 раз уже на второй день. AI агент сам написал контент-план, создал креативы и настроил прием платежей. Теперь получаю стабильный пассивный доход 15-20 тысяч рублей в неделю!»</p>
-        </div>
-      </div>
+    <div class="slide" id="slide-2">
+      <h2 class="slide-title">Marble <br>Emotion</h2>
+      <p class="slide-desc">A sculpture frozen at the peak of human suffering and heroic struggle. Laocoön and his sons, bound by ruthless fate.</p>
     </div>
-  </section>
 
-  <!-- FAQ Section -->
-  <section id="faq" class="sec">
-    <div class="wrap maxw820">
-      <div class="eyebrow center mb16">Ответы на вопросы</div>
-      <h2 class="h2-48 center mb48">Часто задаваемые <span class="text-gradient">вопросы</span></h2>
-      
-      <div class="faq-list">
-        <details class="qa">
-          <summary>Мне действительно не нужно уметь программировать или верстать? <span class="plus">+</span></summary>
-          <div class="ans">Абсолютно нет. Все современные ИИ-инструменты работают по принципу no-code и на обычном языке. Мы даем готовые шаблоны сайтов, автоматизаций и промптов, которые настраиваются простым копированием и перетаскиванием.</div>
-        </details>
-        <details class="qa">
-          <summary>Какие реальные инструменты и сервисы мне понадобятся для старта? <span class="plus">+</span></summary>
-          <div class="ans">Для работы вам понадобятся только стабильный VPN, зарубежный аккаунт Google (мы покажем, как его создать за 2 минуты без вложений) и доступ к ИИ-платформам. Никаких сложных программ или дорогого оборудования не нужно — достаточно обычного ноутбука.</div>
-        </details>
-        <details class="qa">
-          <summary>Сколько времени в день нужно уделять этой системе? <span class="plus">+</span></summary>
-          <div class="ans">На старте достаточно 2–3 часов в день. Этого времени хватит, чтобы запустить ИИ-агента для автопоиска клиентов, отправить готовые аудиты и провести первые переговоры.</div>
-        </details>
-        <details class="qa">
-          <summary>Как быстро я смогу закрыть первого клиента и заработать? <span class="plus">+</span></summary>
-          <div class="ans">Большинство наших учеников закрывают первого клиента на платное ведение уже в течение первой недели. Благодаря тому, что вы отправляете клиенту уже готовый аудит, сайт и креативы, они сразу видят ценность и соглашаются на оплату.</div>
-        </details>
-        <details class="qa">
-          <summary>Работает ли это, если я живу в небольшом городе? <span class="plus">+</span></summary>
-          <div class="ans">Да, и даже лучше. В регионах конкуренция среди специалистов по ИИ практически отсутствует, а местный бизнес (клиники, автосервисы, салоны красоты) отчаянно нуждается в оптимизации затрат на рекламу и новых клиентах.</div>
-        </details>
-        <details class="qa">
-          <summary>Нужно ли мне вкладывать собственные деньги в рекламу? <span class="plus">+</span></summary>
-          <div class="ans">Нет, на старте собственные вложения не требуются. Вы ищете клиентов органическим методом через ИИ-агентов и предлагаете им аудит. Рекламный бюджет на продвижение оплачивает сам клиент после заключения договора.</div>
-        </details>
-        <details class="qa">
-          <summary>Как мне получить доступ к этой системе? <span class="plus">+</span></summary>
-          <div class="ans">Просто нажмите на любую кнопку «Начать тест-драйв» на этой странице, заполните короткую форму, и вы мгновенно получите доступ к видеопрезентации с разбором системы, а также сможете скачать готовые шаблоны и инструменты для старта.</div>
-        </details>
-      </div>
+    <div class="slide" id="slide-3">
+      <h2 class="slide-title">Liquid Metal</h2>
+      <p class="slide-desc">Art that breathes. Mesmerizing waves of liquid bronze flow through space, reflecting every contour and tensed muscle of the ancient masterpiece.</p>
     </div>
-  </section>
 
-  <!-- Final CTA Callout -->
-  <section class="sec claim">
-    <div class="wrap">
-      <h2 class="h2-56 claim-h">Начните <span class="text-gradient">зарабатывать от 5000$ на AI</span> уже сегодня</h2>
-      <p class="body-l muted maxw600 mx mb32">Начните трехдневный тест-драйв системы всего за 2 990 ₽, пока доступно</p>
-      
-      <div class="claim-card">
-        <div class="claim-price">
-          <span class="claim-was">150 000 ₽</span>
-          <span class="claim-now" style="display: flex; flex-direction: column; align-items: center; line-height: 1.1;">
-            <span>2 990 ₽</span>
-            <span style="font-size: 0.95rem; color: #4d8eff; font-weight: 700; margin-top: 8px; letter-spacing: 0.05em; font-family: 'Outfit', sans-serif;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
-          </span>
-          <span class="claim-now-label">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
-        </div>
-        <div class="claim-feats">
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Пошаговая система создания мини-продукта и заработка от 5000$ без вашего участия
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Готовые AI агенты, которые сделают вам продукт бесплатно за вас
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Готовые шаблоны автоворонок
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Система привлечения пользователей в ваш готовый продукт
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Система создания AI контента от самых передовых моделей бесплатно
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Руководство по приему платежей по всему миру (в валюте и рублях)
-          </span>
-        </div>
-        <a href="https://yookassa.ru" class="btn-primary full open-modal-btn">Оплатить тест-драйв</a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="foot">
-    <div class="wrap">
-      <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; text-align: left; margin-bottom: 2rem; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: 2rem;">
-        <div>
-          <div class="logo-text" style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem;">AI Hustlers</div>
-          <p style="line-height: 1.5; margin-bottom: 0.5rem;">Трёхдневный тест-драйв системы создания мини-продуктов с помощью AI.</p>
-          <p style="line-height: 1.5;">&copy; 2026 AI Hustlers. Все права защищены.</p>
-        </div>
-        <div>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">ИП Тютин Максим Андреевич</p>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">ИНН: 440319672959</p>
-          <p style="line-height: 1.6;">ОГРНИП: 323440000018883</p>
-        </div>
-        <div>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">Email: <a href="mailto:maxtyutin@gmail.com" style="color: var(--cta-primary); text-decoration: underline;">maxtyutin@gmail.com</a></p>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">Поддержка: <a href="https://t.me/tyutinmax" target="_blank" style="color: var(--cta-primary); text-decoration: underline;">Telegram</a> | <a href="https://vk.com/tyutinmax" target="_blank" style="color: var(--cta-primary); text-decoration: underline;">ВКонтакте</a></p>
-          <p style="line-height: 1.6;">Телефон: +79159214060</p>
-        </div>
-        <div>
-          <p style="line-height: 1.6; margin-bottom: 0.5rem;">Доступ предоставляется в электронном виде на указанный email / Telegram / VK сразу после оплаты.</p>
-          <p style="line-height: 1.6;">Оплата производится онлайн через защищенный шлюз Юкасса.</p>
-        </div>
-      </div>
-      <div class="flinks" style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; font-size: 0.8rem;">
-        <a href="privacy.html">Политика конфиденциальности</a>
-        <a href="consent.html">Согласие на обработку персональных данных</a>
-        <a href="offer.html">Договор оферты</a>
-        <a href="marketing.html">Согласие на рекламную рассылку</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Application Modal -->
-  <div class="modal-overlay" id="app-modal">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <button class="modal-close" onclick="closeModal()">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-      <div class="modal-header">
-        <h3 class="modal-title" style="font-family: 'Space Grotesk', 'Manrope', sans-serif; font-weight: 800; font-size: 1.5rem; text-transform: uppercase; background: linear-gradient(180deg, #adc6ff 0%, #4d8eff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; text-align: left;">ТЕСТ-ДРАЙВ СИСТЕМЫ</h3>
-        <p class="modal-desc" style="font-size: 0.9rem; color: #888; margin-bottom: 1.5rem; line-height: 1.5; text-align: left;">Заполните форму, чтобы начать трехдневный тест-драйв системы.</p>
-      </div>
-      <form id="app-form" action="https://api.web3forms.com/submit" method="POST" autocomplete="on" accept-charset="UTF-8" style="display: flex; flex-direction: column; gap: 1rem;">
-        <!-- Web3Forms Configuration -->
-        <input type="hidden" name="access_key" id="web3forms-access-key" value="41bc8576-ffd3-4a5d-bf2f-456a11df1864">
-        <input type="hidden" name="subject" value="Новая заявка на тест-драйв AI HUSTLERS">
-        <input type="hidden" name="from_name" value="AI Hustlers Website">
-        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
-        
-        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
-          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Имя <span style="color: #ffb780;">*</span></label>
-          <input type="text" id="name_input" required placeholder="Ваше имя" class="form-control" name="name" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
-        </div>
-        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
-          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Email <span style="color: #ffb780;">*</span></label>
-          <input type="email" id="email_input" required placeholder="your-email@mail.com" class="form-control" name="email" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
-        </div>
-        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
-          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Телефон <span style="color: #ffb780;">*</span></label>
-          <input type="tel" id="phone" required class="form-control" name="phone" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px 14px 56px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
-        </div>
-        
-        <p class="form-disclaimer" style="font-size: 11px; line-height: 1.5; color: #8c909f; text-align: center; margin: 8px 0 12px; font-family: inherit;">
-          Нажимая на кнопку, вы соглашаетесь с условиями и даете согласие на обработку персональных данных.
-        </p>
-        
-        <button type="submit" id="submit-btn" class="btn-primary full" style="width: 100%; border: none;">
-          <span>ОПЛАТИТЬ ТЕСТ-ДРАЙВ ➔</span>
-          <span id="btn-spinner" class="spinner" style="display: none;"></span>
-        </button>
-        <div id="form-msg" class="form-message" style="display: none; color: #ff8080; font-size: 13px; text-align: center; margin-top: 10px;"></div>
-      </form>
+    <div class="slide" id="slide-4">
+      <h2 class="slide-title">Eternal <br>Moment</h2>
+      <p class="slide-desc">Contemplating antique form through the lens of new dimensions. A classic masterpiece reborn in the currents of radiant digital matter.</p>
     </div>
   </div>
 
-  <!-- Подключаем скрипт выбора страны для телефона -->
-  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/js/intlTelInput.min.js"></script>
-  <script src="app.js?v=2.7.4"></script>
+  <div class="slide-image-mask" id="slide-2-img">
+    <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/laocoon-59f84455c6/1.png" alt="Editorial Concept">
+  </div>
+
+  <div class="grid-horizontal-line"></div>
+  <div class="grid-lines">
+    <div class="grid-line"><div class="grid-dot top"></div><div class="grid-dot bottom"></div></div>
+    <div class="grid-line"><div class="grid-dot top"></div><div class="grid-dot bottom"></div></div>
+    <div class="grid-line"><div class="grid-dot top"></div><div class="grid-dot bottom"></div></div>
+    <div class="grid-line"><div class="grid-dot top"></div><div class="grid-dot bottom"></div></div>
+    <div class="grid-line story-progress-container">
+      <div class="grid-dot top"></div>
+      <div class="grid-dot bottom"></div>
+      <div class="story-dashes">
+        <div class="story-dash"><div class="story-dash-fill" id="dash-fill-1"></div></div>
+        <div class="story-dash"><div class="story-dash-fill" id="dash-fill-2"></div></div>
+        <div class="story-dash"><div class="story-dash-fill" id="dash-fill-3"></div></div>
+        <div class="story-dash"><div class="story-dash-fill" id="dash-fill-4"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="webgl"></canvas>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+    const ASSET_BASE_URL = "https://api.getlayers.ai/storage/v1/object/public/public/assets/laocoon-59f84455c6";
+
+    const canvas = document.querySelector('#webgl');
+    let scene, camera, renderer;
+    let gltfModel;
+    let modelPivot;
+    let mixer;
+    const clock = new THREE.Clock();
+    let currentScroll = 0;
+
+    let mouseX = 0, mouseY = 0, targetMouseX = 0, targetMouseY = 0;
+
+    let cursorX = window.innerWidth / 2,  cursorY = window.innerHeight / 2;
+    let outerCursorX = window.innerWidth / 2, outerCursorY = window.innerHeight / 2;
+
+    let bgMaterial;
+    const shaderUniforms = {
+        uTime: { value: 0 },
+        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uScroll: { value: 0 }
+    };
+
+    let sparkParticles;
+    const sparkCount = 450;
+    const sparkData = [];
+
+    const sizes = { width: window.innerWidth, height: window.innerHeight };
+
+    function createSparkTexture() {
+        const c = document.createElement('canvas');
+        c.width = 16; c.height = 16;
+        const ctx = c.getContext('2d');
+        const gradient = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        gradient.addColorStop(0.25, 'rgba(255, 255, 255, 0.85)');
+        gradient.addColorStop(0.6, 'rgba(255, 255, 255, 0.3)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 16, 16);
+        return new THREE.CanvasTexture(c);
+    }
+
+    function createSparks() {
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(sparkCount * 3);
+        const colors = new Float32Array(sparkCount * 3);
+
+        for (let i = 0; i < sparkCount; i++) {
+            const x = (Math.random() - 0.5) * 6.5;
+            const y = (Math.random() - 0.5) * 5.0 - 0.5;
+            const z = (Math.random() - 0.5) * 6.5;
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = z;
+
+            if (Math.random() < 0.6) {
+                colors[i * 3] = 1.0;
+                colors[i * 3 + 1] = 0.4 + Math.random() * 0.15;
+                colors[i * 3 + 2] = 0.05 + Math.random() * 0.1;
+            } else {
+                colors[i * 3] = 0.55 + Math.random() * 0.15;
+                colors[i * 3 + 1] = 0.82 + Math.random() * 0.12;
+                colors[i * 3 + 2] = 1.0;
+            }
+
+            sparkData.push({
+                speedX: (Math.random() - 0.5) * 0.4,
+                speedY: 0.15 + Math.random() * 0.3,
+                speedZ: (Math.random() - 0.5) * 0.4,
+                swaySpeed: 0.5 + Math.random() * 1.5,
+                swayRadius: 0.05 + Math.random() * 0.15,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.025,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            map: createSparkTexture()
+        });
+
+        sparkParticles = new THREE.Points(geometry, material);
+        scene.add(sparkParticles);
+    }
+
+    function createBackgroundShader() {
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec2 vUv;
+            uniform float uTime;
+            uniform vec2 uResolution;
+            uniform vec2 uMouse;
+            uniform float uScroll;
+
+            float hash(float n) { return fract(sin(n) * 43758.5453123); }
+            float noise(in vec3 x) {
+                vec3 p = floor(x);
+                vec3 f = fract(x);
+                f = f*f*(3.0-2.0*f);
+                float n = p.x + p.y*57.0 + 113.0*p.z;
+                return mix(mix(mix(hash(n+  0.0), hash(n+  1.0), f.x),
+                               mix(hash(n+ 57.0), hash(n+ 58.0), f.x), f.y),
+                           mix(mix(hash(n+113.0), hash(n+114.0), f.x),
+                               mix(hash(n+170.0), hash(n+171.0), f.x), f.y), f.z);
+            }
+
+            void main() {
+                vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution.xy) / uResolution.y;
+                float aspect = uResolution.x / uResolution.y;
+                
+                float time = uTime * 0.08;
+                float scroll = uScroll;
+                
+                float angle1 = 0.6;
+                float angle2 = -0.7;
+                float angle3 = 1.2;
+                
+                float freq1 = 2.4;
+                float freq2 = 3.2;
+                float freq3 = 4.0;
+                
+                vec2 warpedUv = uv;
+                
+                float scrollDeform = scroll * 5.0;
+                
+                warpedUv.x += sin(uv.y * 2.5 + time * 0.2 + scrollDeform) * 0.35;
+                warpedUv.y += cos(uv.x * 2.5 - time * 0.15 - scrollDeform * 0.8) * 0.35;
+                
+                warpedUv.x += sin(uv.y * 1.2 - time * 0.1 - scrollDeform * 1.5) * 0.25;
+                warpedUv.y += cos(uv.x * 1.2 + time * 0.18 + scrollDeform * 1.2) * 0.25;
+                
+                vec2 scrollDrift = vec2(scroll * 0.04, -scroll * 0.02);
+                vec2 mouseShift = vec2(uMouse.x * aspect * 0.05, uMouse.y * 0.05);
+                warpedUv += scrollDrift + mouseShift;
+                
+                vec2 dir1 = vec2(cos(angle1), sin(angle1));
+                vec2 dir2 = vec2(cos(angle2), sin(angle2));
+                vec2 dir3 = vec2(cos(angle3), sin(angle3));
+                
+                float w1 = sin(dot(warpedUv, dir1) * freq1 + time * 1.0);
+                float w2 = cos(dot(warpedUv, dir2) * freq2 - time * 1.4 + w1 * 0.4);
+                float w3 = sin(dot(warpedUv, dir3) * freq3 + time * 1.8 + w2 * 0.5);
+                
+                float waveField = w1 * 0.50 + w2 * 0.35 + w3 * 0.15;
+                
+                float wideSheen = pow(max(0.0, 1.0 - abs(waveField - 0.1)), 2.5);
+                float crispSpecular = pow(max(0.0, 1.0 - abs(waveField - 0.15)), 8.0);
+                
+                float crest = wideSheen * 0.5 + crispSpecular * 0.9;
+                
+                vec3 c0_shadow = vec3(0.0010, 0.0006, 0.0004);
+                vec3 c0_wave1  = vec3(0.085, 0.040, 0.015);
+                vec3 c0_wave2  = vec3(0.050, 0.022, 0.008);
+                vec3 c0_crest  = vec3(0.45, 0.30, 0.18);
+                
+                vec3 c1_shadow = vec3(0.0004, 0.0006, 0.0012);
+                vec3 c1_wave1  = vec3(0.015, 0.035, 0.065);
+                vec3 c1_wave2  = vec3(0.008, 0.020, 0.045);
+                vec3 c1_crest  = vec3(0.18, 0.35, 0.55);
+                
+                float t = smoothstep(0.0, 1.0, scroll);
+                vec3 colShadow = mix(c0_shadow, c1_shadow, t);
+                vec3 colWave1  = mix(c0_wave1, c1_wave1, t);
+                vec3 colWave2  = mix(c0_wave2, c1_wave2, t);
+                vec3 colCrest  = mix(c0_crest, c1_crest, t);
+                
+                vec3 color = colShadow;
+                color = mix(color, colWave2, smoothstep(-0.6, 0.2, waveField));
+                color = mix(color, colWave1, smoothstep(0.0, 0.8, waveField));
+                
+                color += colCrest * crest * 1.4;
+                
+                float vignette = 1.0 - dot(uv, uv) * 0.12;
+                color *= vignette;
+                
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `;
+
+        bgMaterial = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            uniforms: shaderUniforms,
+            depthWrite: false,
+            depthTest: false
+        });
+
+        const bgGeometry = new THREE.PlaneGeometry(30, 30);
+        const bgMesh = new THREE.Mesh(bgGeometry, bgMaterial);
+        bgMesh.position.set(0.0, 0.0, -8.0);
+        bgMesh.renderOrder = -10;
+        camera.add(bgMesh);
+    }
+
+    function loadModel() {
+        const loader = new GLTFLoader();
+        loader.load(
+            ASSET_BASE_URL + '/bronze_horse.glb',
+            (gltf) => {
+                gltfModel = gltf.scene;
+
+                modelPivot = new THREE.Group();
+                scene.add(modelPivot);
+                modelPivot.add(gltfModel);
+
+                gltfModel.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                        if (child.material) {
+                            child.material.roughness = 0.42;
+                            child.material.metalness = 0.92;
+                            child.material.flatShading = false;
+                            if (child.material.map) {
+                                child.material.map.anisotropy = 16;
+                            }
+                        }
+                    }
+                });
+
+                if (gltf.animations && gltf.animations.length > 0) {
+                    mixer = new THREE.AnimationMixer(gltfModel);
+                    gltf.animations.forEach((clip) => { mixer.clipAction(clip).play(); });
+                }
+
+                const boxInitial = new THREE.Box3().setFromObject(gltfModel);
+                const sizeInitial = boxInitial.getSize(new THREE.Vector3());
+                const maxDim = Math.max(sizeInitial.x, sizeInitial.y, sizeInitial.z);
+                const targetScale = 3.5 / (maxDim > 0.0001 ? maxDim : 1);
+                gltfModel.scale.setScalar(targetScale);
+
+                gltfModel.updateMatrixWorld(true);
+
+                const boxScaled = new THREE.Box3().setFromObject(gltfModel);
+                const centerScaled = boxScaled.getCenter(new THREE.Vector3());
+
+                gltfModel.position.sub(centerScaled);
+
+                modelPivot.position.y = -0.4;
+            },
+            undefined,
+            (error) => { console.error('Error loading bronze horse model:', error); }
+        );
+    }
+
+    function onWindowResize() {
+        sizes.width = window.innerWidth;
+        sizes.height = window.innerHeight;
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        if (shaderUniforms) shaderUniforms.uResolution.value.set(sizes.width, sizes.height);
+    }
+
+    function splitTitlesIntoChars() {
+        const titles = document.querySelectorAll('.slide-title');
+        titles.forEach(title => {
+            const text = title.innerHTML;
+            let newHTML = '';
+            let delayCounter = 0;
+            const parts = text.split(/(<br\s*\/?>)/i);
+            parts.forEach(part => {
+                if (part.toLowerCase().startsWith('<br')) {
+                    newHTML += part;
+                } else {
+                    for (let i = 0; i < part.length; i++) {
+                        if (part[i] === ' ') {
+                            newHTML += ' ';
+                        } else {
+                            newHTML += `<span class="char" style="transition-delay: ${delayCounter * 0.035}s">${part[i]}</span>`;
+                            delayCounter++;
+                        }
+                    }
+                }
+            });
+            title.innerHTML = newHTML;
+        });
+    }
+
+    function updateGridDots(scroll) {
+        const dots = document.querySelectorAll('.grid-dot');
+        dots.forEach((dot, i) => {
+            const startY = (i * 17) % 80 + 10;
+            let speed = 90 + (i * 55) % 180;
+            if (i % 2 === 0) speed = -speed;
+            let y = startY + scroll * speed;
+            y = ((y % 100) + 100) % 100;
+            dot.style.top = `${y}%`;
+        });
+    }
+
+    function updateSlides(scroll) {
+        const slide1 = document.getElementById('slide-1');
+        const slide2 = document.getElementById('slide-2');
+        const slide3 = document.getElementById('slide-3');
+        const slide4 = document.getElementById('slide-4');
+
+        for (let i = 1; i <= 4; i++) {
+            const fill = document.getElementById(`dash-fill-${i}`);
+            if (fill) {
+                const start = (i - 1) * 0.25;
+                const end = i * 0.25;
+                let progress = (scroll - start) / (end - start);
+                progress = Math.max(0, Math.min(1, progress));
+                fill.style.height = `${progress * 100}%`;
+            }
+        }
+
+        function isActive(val, start, end) { return val >= start && val <= end; }
+
+        if (slide1) slide1.classList.toggle('active', isActive(scroll, -0.10, 0.12));
+        if (slide2) {
+            const active2 = isActive(scroll, 0.28, 0.40);
+            slide2.classList.toggle('active', active2);
+            const slide2Img = document.getElementById('slide-2-img');
+            if (slide2Img) slide2Img.classList.toggle('active', active2);
+        }
+        if (slide3) slide3.classList.toggle('active', isActive(scroll, 0.56, 0.68));
+        if (slide4) slide4.classList.toggle('active', isActive(scroll, 0.84, 1.05));
+    }
+
+    function setupNavigation() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const targetScrolls = [0.0, 0.34, 0.62, 0.94];
+        navLinks.forEach((link, index) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const targetY = maxScroll * targetScrolls[index];
+                window.scrollTo({ top: targetY, behavior: 'smooth' });
+            });
+        });
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const deltaTime = clock.getDelta();
+        if (mixer) mixer.update(deltaTime);
+
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollTop = window.scrollY !== undefined ? window.scrollY
+            : (window.pageYOffset !== undefined ? window.pageYOffset : document.documentElement.scrollTop);
+        const targetScroll = maxScroll > 0 ? scrollTop / maxScroll : 0;
+
+        currentScroll += (targetScroll - currentScroll) * 0.025;
+
+        mouseX += (targetMouseX - mouseX) * 0.05;
+        mouseY += (targetMouseY - mouseY) * 0.05;
+
+        outerCursorX += (cursorX - outerCursorX) * 0.2;
+        outerCursorY += (cursorY - outerCursorY) * 0.2;
+        const cursorOuter = document.querySelector('.cursor-outer');
+        if (cursorOuter) { cursorOuter.style.left = `${outerCursorX}px`; cursorOuter.style.top = `${outerCursorY}px`; }
+
+        if (modelPivot) {
+            modelPivot.rotation.y = mouseX * 0.25;
+            modelPivot.rotation.x = mouseY * 0.15;
+        }
+
+        if (sparkParticles) {
+            const positions = sparkParticles.geometry.attributes.position.array;
+            const time = clock.getElapsedTime();
+            const scrollVelocity = Math.abs(targetScroll - currentScroll);
+            const speedMultiplier = 1.0 + scrollVelocity * 9.0;
+            const turbulence = scrollVelocity * 0.8;
+
+            for (let i = 0; i < sparkCount; i++) {
+                const idx = i * 3;
+                const data = sparkData[i];
+                positions[idx]     += data.speedX * deltaTime * speedMultiplier;
+                positions[idx + 1] += data.speedY * deltaTime * speedMultiplier;
+                positions[idx + 2] += data.speedZ * deltaTime * speedMultiplier;
+
+                const currentSway = data.swayRadius * (1.0 + turbulence * 4.0);
+                positions[idx]     += Math.sin(time * data.swaySpeed + data.phase) * currentSway * deltaTime;
+                positions[idx + 2] += Math.cos(time * data.swaySpeed + data.phase) * currentSway * deltaTime;
+
+                if (positions[idx + 1] > 3.0 || Math.abs(positions[idx]) > 3.5 || Math.abs(positions[idx + 2]) > 3.5) {
+                    positions[idx + 1] = -2.5;
+                    positions[idx]     = (Math.random() - 0.5) * 3.0;
+                    positions[idx + 2] = (Math.random() - 0.5) * 3.0;
+                }
+            }
+            sparkParticles.geometry.attributes.position.needsUpdate = true;
+        }
+
+        const phi = currentScroll * Math.PI * 2.0;
+        const y = 0.35 + Math.sin(currentScroll * Math.PI) * 0.8;
+        const radius = 4.2 - Math.sin(currentScroll * Math.PI) * 0.6;
+        const x = radius * Math.sin(phi);
+        const z = radius * Math.cos(phi);
+
+        let transitionProgress = Math.min(1.0, currentScroll / 0.28);
+        let easeFactor = (Math.cos(transitionProgress * Math.PI) + 1.0) * 0.5;
+        const lookAtXOffset = -0.9 * easeFactor;
+        const targetLookAt = new THREE.Vector3(lookAtXOffset, -0.15, 0);
+        const targetPos = new THREE.Vector3(x, y, z);
+        camera.position.lerp(targetPos, 0.025);
+        camera.lookAt(targetLookAt);
+
+        if (shaderUniforms) {
+            shaderUniforms.uTime.value = clock.getElapsedTime();
+            shaderUniforms.uMouse.value.set(mouseX, -mouseY);
+            shaderUniforms.uScroll.value = currentScroll;
+        }
+
+        updateSlides(currentScroll);
+        updateGridDots(currentScroll);
+        renderer.render(scene, camera);
+    }
+
+    function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color('#000000');
+        scene.fog = new THREE.FogExp2('#000000', 0.01);
+
+        camera = new THREE.PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 100);
+        camera.position.set(0, 0.2, 3.0);
+        scene.add(camera);
+
+        createBackgroundShader();
+
+        renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 2.2;
+
+        const ambientLight = new THREE.AmbientLight('#ffffff', 0.1);
+        scene.add(ambientLight);
+
+        const keyLight = new THREE.SpotLight('#ffffff', 18.0);
+        keyLight.position.set(4, 6, 3);
+        keyLight.angle = Math.PI / 4;
+        keyLight.penumbra = 0.9;
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
+        keyLight.shadow.camera.near = 1.0;
+        keyLight.shadow.camera.far = 15;
+        keyLight.shadow.bias = -0.001;
+        scene.add(keyLight);
+
+        const rimLight = new THREE.DirectionalLight('#e3f2ff', 10.0);
+        rimLight.position.set(-5, 3, -4);
+        scene.add(rimLight);
+
+        const fillLight = new THREE.DirectionalLight('#fff3e6', 0.8);
+        fillLight.position.set(-2, -4, 2);
+        scene.add(fillLight);
+
+        createSparks();
+        loadModel();
+
+        window.addEventListener('mousemove', (event) => {
+            cursorX = event.clientX;
+            cursorY = event.clientY;
+            const cursorInner = document.querySelector('.cursor-inner');
+            if (cursorInner) { cursorInner.style.left = `${cursorX}px`; cursorInner.style.top = `${cursorY}px`; }
+            targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            targetMouseY = (event.clientY / window.innerHeight) * 2 - 1;
+        });
+
+        window.addEventListener('resize', onWindowResize);
+
+        splitTitlesIntoChars();
+        onWindowResize();
+        animate();
+        setupNavigation();
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
