@@ -50,70 +50,9 @@ body.fbz {
   position: relative;
 }
 
-/* Background Glow Effects */
+/* Keep the page background uniform, without decorative edge glows. */
 .glow-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.glow-circle {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(150px);
-  opacity: 0.18;
-}
-
-.glow-orange {
-  width: 600px;
-  height: 600px;
-  background-color: var(--cta-primary);
-}
-
-.glow-purple {
-  width: 700px;
-  height: 700px;
-  background-color: var(--accent-purple);
-}
-
-.glow-top-left {
-  top: -100px;
-  left: -200px;
-}
-
-.glow-top-right {
-  top: 400px;
-  right: -300px;
-}
-
-.glow-mid-left {
-  top: 25%;
-  left: -300px;
-}
-
-.glow-mid-right {
-  top: 45%;
-  right: -300px;
-}
-
-.glow-low-left {
-  top: 68%;
-  left: -300px;
-}
-
-.glow-low-right {
-  top: 82%;
-  right: -300px;
-}
-
-.glow-bottom-left {
-  top: 93%;
-  left: -200px;
+  display: none;
 }
 
 /* Layout wrappers */
