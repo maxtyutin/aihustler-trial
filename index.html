@@ -1,606 +1,92 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Практический тест-драйв. Узнайте, как создать свой мини-продукт за 1 вечер с помощью AI и зарабатывать на его продаже от 5000$ без вашего участия.">
-  <title>AI Hustlers — Трехдневный тест-драйв системы создания продуктов за 2 990 ₽</title>
-  
-  <!-- Preload fonts and styles -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2.7.3">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/css/intlTelInput.css">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF631F'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/></svg>">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Собери свою AI-систему: цифровой продукт, контент без лица и приём оплат. Пошаговая программа AI Hustlers, готовые промпты и шаблоны.">
+<meta name="theme-color" content="#111111">
+<title>AI Hustlers — Твоя система создания и продажи продуктов с ИИ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="landing.css?v=20261106-1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/css/intlTelInput.css">
 </head>
-<body class="fbz">
-
-  <!-- Background decorative glows -->
-  <div class="glow-bg">
-    <div class="glow-circle glow-orange glow-top-left"></div>
-    <div class="glow-circle glow-purple glow-top-right"></div>
-    <div class="glow-circle glow-purple glow-mid-left"></div>
-    <div class="glow-circle glow-orange glow-mid-right"></div>
-    <div class="glow-circle glow-orange glow-low-left"></div>
-    <div class="glow-circle glow-purple glow-low-right"></div>
-    <div class="glow-circle glow-orange glow-bottom-left"></div>
-  </div>
-
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="wrap">
-      <span class="tag-eyebrow">AI HUSTLERS · ТЕСТ-ДРАЙВ ЗА 2 990 ₽</span>
-      <h1 class="display">Трёхдневный <span class="text-gradient">тест-драйв</span> системы</h1>
-      <p class="sub body-l">Благодаря которой ты уже сегодня создашь свой онлайн-продукт, а через 3-4 недели выйдешь на стабильные 5000$ в месяц</p>
-      
-      <div class="chips">
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          Без знания кода
-        </span>
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          Без вложений
-        </span>
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          Без опыта
-        </span>
-        <span class="pill-lime">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg> 
-          1 вечер на запуск
-        </span>
-      </div>
-
-      <!-- Video Player container -->
-      <div class="video-wrap" id="videoContainer">
-        <div class="video-overlay" id="videoOverlay">
-          <div class="play-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="36" height="36">
-              <path d="M8 5V19L19 12L8 5Z"/>
-            </svg>
-          </div>
-          <span class="video-duration">10:42</span>
-          <span class="video-hint">Нажмите, чтобы включить презентацию</span>
-        </div>
-        <video id="heroVideo" src="hero-video.mp4" controls preload="metadata"></video>
-      </div>
-
-      <div class="hero-price-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 32px auto 24px auto; text-align: center; font-family: 'Space Grotesk', 'Outfit', 'Manrope', sans-serif;">
-        <span class="was-price" style="text-decoration: line-through; color: #ff4d4d; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em;">150 000 ₽</span>
-        <span class="now-price" style="color: #10b981; font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 4px;">2 990 ₽</span>
-        <span class="timer-text" style="color: #4d8eff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
-        <span class="label-text" style="color: #8c909f; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px;">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
-      </div>
-      
-      <a href="https://yookassa.ru" class="btn-primary open-modal-btn">Начать тест-драйв</a>
-
-      <div class="proof">
-        <div class="avs">
-          <img class="av av-1" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Ученик 1">
-          <img class="av av-2" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80" alt="Ученик 2">
-          <img class="av av-3" src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=100&h=100&q=80" alt="Ученик 3">
-        </div>
-        <span class="tp">
-          <span class="tp-star">
-            <svg viewBox="0 0 24 24" width="15" height="15">
-              <polygon fill="#fff" points="12,3 14.6,9.1 21.2,9.6 16.2,13.9 17.8,20.4 12,16.8 6.2,20.4 7.8,13.9 2.8,9.6 9.4,9.1"></polygon>
-            </svg>
-          </span>
-          <b class="tp-name">Оценка 4.9/5</b>
-          <span class="body-s muted tp-meta">Более 100 учеников</span>
-        </span>
-      </div>
-      
-    </div>
-  </header>
-
-  <!-- Value Stack Section -->
-  <div class="wrap"><div class="divider"></div></div>
-
-  <!-- Explanation Section -->
-  <!-- Why the model works -->
-  <section id="why" class="sec band">
-    <div class="wrap">
-      <div class="eyebrow center mb16">Бизнес-модель</div>
-      <h2 class="h2-48 center mb14">Почему эта <span class="text-gradient">система работает</span>?</h2>
-      <p class="body-l muted mx maxw600 mb48 center">Вам не нужно быть блогером или закупать дорогостоящий товар из Китая, для работы всего лишь нужен только ноутбук и интернет.</p>
-      
-      <div class="g3 whyg">
-        <!-- Card 1 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                <circle cx="12" cy="12" r="2.5"></circle>
-                <path d="M6 12h.01M18 12h.01"></path>
-              </svg>
-            </span>
-            <span class="whynum">01</span>
-          </div>
-          <h3 class="h3-22 mb12">Без лица</h3>
-          <p class="body-m muted m0">Вам не нужно вести личный блог или снимать себя на камеру</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3v4M12 17v4M3 12h4M17 12h4"></path>
-              </svg>
-            </span>
-            <span class="whynum">02</span>
-          </div>
-          <h3 class="h3-22 mb12">Без вложений</h3>
-          <p class="body-m muted m0">Вам не нужно закупать товар или дорогие подписки на сервисы, все что вам нужно это ноутбук и интернет</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 15 15"></polyline>
-              </svg>
-            </span>
-            <span class="whynum">03</span>
-          </div>
-          <h3 class="h3-22 mb12">Запуск за 1 вечер</h3>
-          <p class="body-m muted m0">Современные ИИ-инструменты позволяют пройти путь от идеи до готового к продажам продукта всего за несколько часов</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="12" rx="1.5"></rect>
-                <path d="M2 20h20"></path>
-              </svg>
-            </span>
-            <span class="whynum">04</span>
-          </div>
-          <h3 class="h3-22 mb12">Полностью удаленно</h3>
-          <p class="body-m muted m0">Управляйте всей системой из любой точки мира, тратя всего пару часов в неделю</p>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="8" width="16" height="11" rx="2"></rect>
-                <path d="M12 8V4M9 13h.01M15 13h.01"></path>
-              </svg>
-            </span>
-            <span class="whynum">05</span>
-          </div>
-          <h3 class="h3-22 mb12">Вся рутина на нейросетях</h3>
-          <p class="body-m muted m0">ИИ берет на себя рутину: от написания текстов и дизайна до генерации контента и автоматических продаж</p>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 17l6-6 4 4 7-7M14 7h6v6"></path>
-              </svg>
-            </span>
-            <span class="whynum">06</span>
-          </div>
-          <h3 class="h3-22 mb12">Регулярный доход</h3>
-          <p class="body-m muted m0">Благодаря трафику и настроеной автоворонки, вы получаете регулярные продажи ежедневно</p>
-        </div>
-
-        <!-- Card 7 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-              </svg>
-            </span>
-            <span class="whynum">07</span>
-          </div>
-          <h3 class="h3-22 mb12">Без опыта</h3>
-          <p class="body-m muted m0">Система проста и понятна. Вам не нужно быть профессиональным маркетологом, дизайнером или программистом, чтобы начать</p>
-        </div>
-
-        <!-- Card 8 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </span>
-            <span class="whynum">08</span>
-          </div>
-          <h3 class="h3-22 mb12">Без команды</h3>
-          <p class="body-m muted m0">Вам не нужно платить им зарплату или снимать офис</p>
-        </div>
-
-        <!-- Card 9 -->
-        <div class="whycard">
-          <div class="whytop">
-            <span class="whyicon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 2l3 3-3 3M4 11V9a4 4 0 0 1 4-4h12"></path>
-              </svg>
-            </span>
-            <span class="whynum">09</span>
-          </div>
-          <h3 class="h3-22 mb12">Продажи без вас</h3>
-          <p class="body-m muted m0">С помощью автоворнки клиенты идут автоматически, ваш продукт после оплаты автоматически отправляется им 24/7</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-    <!-- Detailed program section -->
-  <section id="program" class="sec band">
-    <div class="wrap">
-      <div class="eyebrow center mb16">Тест-драйв</div>
-      <h2 class="h2-48 center mb48"><span class="text-gradient">Программа</span> тест-драйва</h2>
-      
-      <div class="g3 program-grid">
-        <div class="program-card animate-on-hover">
-          <div class="feat-img-container">
-            <div class="module-banner banner-m1">
-              <div class="banner-decor"></div>
-              <div class="banner-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M9 17h6M12 2v2M5.22 5.22l1.42 1.42M18.78 5.22l-1.42 1.42M12 6a6 6 0 0 0-6 6c0 1.66.7 3.13 1.8 4.17A2 2 0 0 1 8.5 19h7a2 2 0 0 1 .7-2.83 6 6 0 0 0 1.8-4.17 6 6 0 0 0-6-6z"/></svg>
-              </div>
-              <div class="banner-title">
-                <span class="title-bold">Day 1</span>
-                <span class="title-serif">AI Agents & MCP</span>
-              </div>
-            </div>
-          </div>
-          <div class="feat-body">
-            <div class="prog-badge">1 день</div>
-            <h3 class="h3-22 mb10">Установка AI агентов, настройка скиллов и MCP</h3>
-            <p class="body-m muted">Установите и настроите Claude Code, ChatGPT Codex, Antigravity, Hermes, OpenCode, VSCode с самыми передовыми моделями: Gemini, Sonnet, Opus, GPT и др., даже если вы находитесь в странах СНГ. Настроите к ним полезные навыки: Discovery Interview, Fullstack Developer, React, Remotion, ui-ux-pro-max и др, а также подключите полезные MCP: context7, playwright и др.</p>
-          </div>
-        </div>
-        
-        <div class="program-card animate-on-hover">
-          <div class="feat-img-container">
-            <div class="module-banner banner-m2">
-              <div class="banner-decor-radial"></div>
-              <div class="banner-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/></svg>
-              </div>
-              <div class="banner-title">
-                <span class="title-bold">Day 2</span>
-                <span class="title-serif">Product & Pay</span>
-              </div>
-            </div>
-          </div>
-          <div class="feat-body">
-            <div class="prog-badge">2 день</div>
-            <h3 class="h3-22 mb10">Создание онлайн-продукта, автоворонка и автоплатежи</h3>
-            <p class="body-m muted">AI агент, даже если вы полный 0 и ни в чем не разбираетесь, создаст вам ваш первый качественный онлайн-продукт с профессиональным сайтом или мобильным приложением, настроит в нём автоворонку и вы сможете принимать платежи от будущих клиентов 24/7 по всему миру и даже без вашего участия. Вам достаточно лишь написать или проговорить голосом вашему ИИ агенту идею вашего будущего онлайн-продукта и он её реализует за несколько минут и совсем бесплатно.</p>
-          </div>
-        </div>
-        
-        <div class="program-card animate-on-hover">
-          <div class="feat-img-container">
-            <div class="module-banner banner-m3">
-              <div class="banner-decor"></div>
-              <div class="banner-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-              </div>
-              <div class="banner-title">
-                <span class="title-bold">Day 3</span>
-                <span class="title-serif">Traffic & Ads</span>
-              </div>
-            </div>
-          </div>
-          <div class="feat-body">
-            <div class="prog-badge">3 день</div>
-            <h3 class="h3-22 mb10">Контент-маркетинг, реклама и монетизация</h3>
-            <p class="body-m muted">AI агент напишет вам контент-план, сценарии о вашем продукте, сгенерирует и опубликует продающие статьи, фото и видеоконтент, настроит рекламу в Яндекс Директ, Вк рекламе, Авито или в Meta, TikTok и Google Ads как профессиональный маркетолог-таргетолог, после этого вы гарантированно начнете получать ежедневно новых клиентов, которые будут платить вам за ваш продукт.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-
-  <!-- Results Section -->
-  <section class="sec band">
-    <div class="wrap">
-      <div class="eyebrow center mb16">Результаты участников</div>
-      <h2 class="h2-48 center mb48"><span class="text-gradient">Результаты</span> учеников</h2>
-      
-
-                        <div class="g3 reviews-grid">
-        <!-- Card 1 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="student-1.jpg" alt="Илья С." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Илья С.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«За вечер собрал свой первый мини-продукт по психологии с помощью ИИ, настроил автоворонку за час. В первый же день пошли переходы, и к концу недели я получил 4 продажи по 2 990 ₽! Абсолютно пассивный доход, система действительно работает!»</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="student-2.jpg" alt="Анна К." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Анна К.</div>
-              <div class="review-status">Ученица</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Я вообще не умею программировать, но ИИ-агенты сделали всё за меня: от сборки курса до приёма платежей. Запустила рекламу, и через два дня пошли первые продажи. За неделю заработала 17 940 ₽ на продаже своего мини-продукта!»</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="student-3.jpg" alt="Сергей М." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Сергей М.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«За три дня разобрался в инструментах, создал продукт в нише фитнеса, подключил автоплатежи и запустил рекламу. Автоворонка сама прогревает и продает 24/7. Уже получил 6 продаж моего курса питания на 30 000 рублей»</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&h=150&q=80" alt="Елена В." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Елена В.</div>
-              <div class="review-status">Ученица</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Раньше потратила бы месяцы и сотни тысяч рублей на веб-разработчиков и копирайтеров. Благодаря тест-драйву AI HUSTLERS за 2 дня сделала свой цифровой гайд по здоровому питанию. В первый же день получила 3 оплаты по 2 990 ₽! Это какой-то космос!»</p>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&h=150&q=80" alt="Дмитрий П." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Дмитрий П.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Всегда думал, что запуск своего онлайн-продукта — это сложно. Но ИИ-агенты буквально за 15 минут собрали мне готовый сайт и подключили автоворонку. За первую неделю пришло 8 клиентов без моего прямого участия!»</p>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="review-card animate-on-hover">
-          <div class="review-header">
-            <div class="review-avatar">
-              <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&h=150&q=80" alt="Максим Г." style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
-            </div>
-            <div class="review-meta">
-              <div class="review-name">Максим Г.</div>
-              <div class="review-status">Ученик</div>
-            </div>
-          </div>
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">«Окупил тест-драйв в 10 раз уже на второй день. AI агент сам написал контент-план, создал креативы и настроил прием платежей. Теперь получаю стабильный пассивный доход 15-20 тысяч рублей в неделю!»</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq" class="sec">
-    <div class="wrap maxw820">
-      <div class="eyebrow center mb16">Ответы на вопросы</div>
-      <h2 class="h2-48 center mb48">Часто задаваемые <span class="text-gradient">вопросы</span></h2>
-      
-      <div class="faq-list">
-        <details class="qa">
-          <summary>Мне действительно не нужно уметь программировать или верстать? <span class="plus">+</span></summary>
-          <div class="ans">Абсолютно нет. Все современные ИИ-инструменты работают по принципу no-code и на обычном языке. Мы даем готовые шаблоны сайтов, автоматизаций и промптов, которые настраиваются простым копированием и перетаскиванием.</div>
-        </details>
-        <details class="qa">
-          <summary>Какие реальные инструменты и сервисы мне понадобятся для старта? <span class="plus">+</span></summary>
-          <div class="ans">Для работы вам понадобятся только стабильный VPN, зарубежный аккаунт Google (мы покажем, как его создать за 2 минуты без вложений) и доступ к ИИ-платформам. Никаких сложных программ или дорогого оборудования не нужно — достаточно обычного ноутбука.</div>
-        </details>
-        <details class="qa">
-          <summary>Сколько времени в день нужно уделять этой системе? <span class="plus">+</span></summary>
-          <div class="ans">На старте достаточно 2–3 часов в день. Этого времени хватит, чтобы запустить ИИ-агента для автопоиска клиентов, отправить готовые аудиты и провести первые переговоры.</div>
-        </details>
-        <details class="qa">
-          <summary>Как быстро я смогу закрыть первого клиента и заработать? <span class="plus">+</span></summary>
-          <div class="ans">Большинство наших учеников закрывают первого клиента на платное ведение уже в течение первой недели. Благодаря тому, что вы отправляете клиенту уже готовый аудит, сайт и креативы, они сразу видят ценность и соглашаются на оплату.</div>
-        </details>
-        <details class="qa">
-          <summary>Работает ли это, если я живу в небольшом городе? <span class="plus">+</span></summary>
-          <div class="ans">Да, и даже лучше. В регионах конкуренция среди специалистов по ИИ практически отсутствует, а местный бизнес (клиники, автосервисы, салоны красоты) отчаянно нуждается в оптимизации затрат на рекламу и новых клиентах.</div>
-        </details>
-        <details class="qa">
-          <summary>Нужно ли мне вкладывать собственные деньги в рекламу? <span class="plus">+</span></summary>
-          <div class="ans">Нет, на старте собственные вложения не требуются. Вы ищете клиентов органическим методом через ИИ-агентов и предлагаете им аудит. Рекламный бюджет на продвижение оплачивает сам клиент после заключения договора.</div>
-        </details>
-        <details class="qa">
-          <summary>Как мне получить доступ к этой системе? <span class="plus">+</span></summary>
-          <div class="ans">Просто нажмите на любую кнопку «Начать тест-драйв» на этой странице, заполните короткую форму, и вы мгновенно получите доступ к видеопрезентации с разбором системы, а также сможете скачать готовые шаблоны и инструменты для старта.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Final CTA Callout -->
-  <section class="sec claim">
-    <div class="wrap">
-      <h2 class="h2-56 claim-h">Начните <span class="text-gradient">зарабатывать от 5000$ на AI</span> уже сегодня</h2>
-      <p class="body-l muted maxw600 mx mb32">Начните трехдневный тест-драйв системы всего за 2 990 ₽, пока доступно</p>
-      
-      <div class="claim-card">
-        <div class="claim-price">
-          <span class="claim-was">150 000 ₽</span>
-          <span class="claim-now" style="display: flex; flex-direction: column; align-items: center; line-height: 1.1;">
-            <span>2 990 ₽</span>
-            <span style="font-size: 0.95rem; color: #4d8eff; font-weight: 700; margin-top: 8px; letter-spacing: 0.05em; font-family: 'Outfit', sans-serif;">ДОСТУП ЗАКОНЧИТСЯ ЧЕРЕЗ: <span class="timer-countdown">45:00</span></span>
-          </span>
-          <span class="claim-now-label">ТЕСТ-ДРАЙВ 3 ДНЯ</span>
-        </div>
-        <div class="claim-feats">
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Пошаговая система создания мини-продукта и заработка от 5000$ без вашего участия
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Готовые AI агенты, которые сделают вам продукт бесплатно за вас
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Готовые шаблоны автоворонок
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Система привлечения пользователей в ваш готовый продукт
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Система создания AI контента от самых передовых моделей бесплатно
-          </span>
-          <span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg> 
-            Руководство по приему платежей по всему миру (в валюте и рублях)
-          </span>
-        </div>
-        <a href="https://yookassa.ru" class="btn-primary full open-modal-btn">Оплатить тест-драйв</a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="foot">
-    <div class="wrap">
-      <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; text-align: left; margin-bottom: 2rem; font-size: 0.85rem; color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: 2rem;">
-        <div>
-          <div class="logo-text" style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.75rem;">AI Hustlers</div>
-          <p style="line-height: 1.5; margin-bottom: 0.5rem;">Трёхдневный тест-драйв системы создания мини-продуктов с помощью AI.</p>
-          <p style="line-height: 1.5;">&copy; 2026 AI Hustlers. Все права защищены.</p>
-        </div>
-        <div>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">ИП Тютин Максим Андреевич</p>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">ИНН: 440319672959</p>
-          <p style="line-height: 1.6;">ОГРНИП: 323440000018883</p>
-        </div>
-        <div>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">Email: <a href="mailto:maxtyutin@gmail.com" style="color: var(--cta-primary); text-decoration: underline;">maxtyutin@gmail.com</a></p>
-          <p style="line-height: 1.6; margin-bottom: 0.25rem;">Поддержка: <a href="https://t.me/tyutinmax" target="_blank" style="color: var(--cta-primary); text-decoration: underline;">Telegram</a> | <a href="https://vk.com/tyutinmax" target="_blank" style="color: var(--cta-primary); text-decoration: underline;">ВКонтакте</a></p>
-          <p style="line-height: 1.6;">Телефон: +79159214060</p>
-        </div>
-        <div>
-          <p style="line-height: 1.6; margin-bottom: 0.5rem;">Доступ предоставляется в электронном виде на указанный email / Telegram / VK сразу после оплаты.</p>
-          <p style="line-height: 1.6;">Оплата производится онлайн через защищенный шлюз Юкасса.</p>
-        </div>
-      </div>
-      <div class="flinks" style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; font-size: 0.8rem;">
-        <a href="privacy.html">Политика конфиденциальности</a>
-        <a href="consent.html">Согласие на обработку персональных данных</a>
-        <a href="offer.html">Договор оферты</a>
-        <a href="marketing.html">Согласие на рекламную рассылку</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Application Modal -->
-  <div class="modal-overlay" id="app-modal">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <button class="modal-close" onclick="closeModal()">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-      <div class="modal-header">
-        <h3 class="modal-title" style="font-family: 'Space Grotesk', 'Manrope', sans-serif; font-weight: 800; font-size: 1.5rem; text-transform: uppercase; background: linear-gradient(180deg, #adc6ff 0%, #4d8eff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; text-align: left;">ТЕСТ-ДРАЙВ СИСТЕМЫ</h3>
-        <p class="modal-desc" style="font-size: 0.9rem; color: #888; margin-bottom: 1.5rem; line-height: 1.5; text-align: left;">Заполните форму, чтобы начать трехдневный тест-драйв системы.</p>
-      </div>
-      <form id="app-form" action="https://api.web3forms.com/submit" method="POST" autocomplete="on" accept-charset="UTF-8" style="display: flex; flex-direction: column; gap: 1rem;">
-        <!-- Web3Forms Configuration -->
-        <input type="hidden" name="access_key" id="web3forms-access-key" value="41bc8576-ffd3-4a5d-bf2f-456a11df1864">
-        <input type="hidden" name="subject" value="Новая заявка на тест-драйв AI HUSTLERS">
-        <input type="hidden" name="from_name" value="AI Hustlers Website">
-        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
-        
-        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
-          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Имя <span style="color: #ffb780;">*</span></label>
-          <input type="text" id="name_input" required placeholder="Ваше имя" class="form-control" name="name" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
-        </div>
-        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
-          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Email <span style="color: #ffb780;">*</span></label>
-          <input type="email" id="email_input" required placeholder="your-email@mail.com" class="form-control" name="email" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
-        </div>
-        <div class="form-group" style="margin-bottom: 0.5rem; text-align: left;">
-          <label style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #adc6ff; margin-bottom: 6px; font-weight: 700;">Телефон <span style="color: #ffb780;">*</span></label>
-          <input type="tel" id="phone" required class="form-control" name="phone" style="background-color: #121318 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; padding: 14px 16px 14px 56px !important; border-radius: 6px !important; font-size: 14px !important; width: 100% !important; box-sizing: border-box !important; outline: none !important; margin: 0 !important; display: block !important;" />
-        </div>
-        
-        <p class="form-disclaimer" style="font-size: 11px; line-height: 1.5; color: #8c909f; text-align: center; margin: 8px 0 12px; font-family: inherit;">
-          Нажимая на кнопку, вы соглашаетесь с условиями и даете согласие на обработку персональных данных.
-        </p>
-        
-        <button type="submit" id="submit-btn" class="btn-primary full" style="width: 100%; border: none;">
-          <span>ОПЛАТИТЬ ТЕСТ-ДРАЙВ ➔</span>
-          <span id="btn-spinner" class="spinner" style="display: none;"></span>
-        </button>
-        <div id="form-msg" class="form-message" style="display: none; color: #ff8080; font-size: 13px; text-align: center; margin-top: 10px;"></div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Подключаем скрипт выбора страны для телефона -->
-  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/js/intlTelInput.min.js"></script>
-  <script src="app.js?v=2.7.4"></script>
-</body>
-</html>
+<body>
+<a class="skip" href="#system">Перейти к содержанию</a>
+<header class="hero">
+<div class="shell">
+<nav class="nav" aria-label="Главная навигация"><a class="wordmark" href="./">AI HUSTLERS<span>СИСТЕМА · ПРАКТИКА · РЕЗУЛЬТАТ</span></a><a href="#access">Получить доступ ↗</a></nav>
+<div class="hero-copy"><p class="eyebrow">ТВОЙ ПЕРВЫЙ ЦИФРОВОЙ ПРОДУКТ С ИИ</p>
+<h1>Собери свою AI-систему,<br>которая создаёт контент<br>и <span>продаёт твой продукт</span></h1>
+<p class="lead">Без лица в кадре, без команды и без знания кода.<br>От первой идеи — до своего продукта и настроенного приёма оплат.</p></div>
+<div class="video-wrap" id="videoContainer">
+<video id="heroVideo" src="hero-video.mp4" controls playsinline preload="metadata" aria-label="Видеопрезентация системы AI Hustlers"></video>
+<button class="video-overlay" id="videoOverlay" aria-label="Смотреть презентацию"><span class="play">▶</span><strong>Посмотри, как устроена система</strong><span>И реши, подходит ли она тебе</span></button>
+</div>
+<p class="hero-note">Идея → AI-продукт → Контент → Продажи</p>
+</div>
+</header>
+<main>
+<section class="access shell" id="access" aria-labelledby="access-title">
+<div class="access-card">
+<p class="eyebrow">ВСЁ ДЛЯ ПЕРВОГО ЗАПУСКА</p><h2 id="access-title">Получи доступ и начни собирать свою систему</h2>
+<p>Пошаговые материалы, AI-инструменты и шаблоны в одном месте.<br><strong>Смотри, повторяй и применяй к своей идее.</strong></p>
+<div class="price">2 990 <span>₽</span></div><p class="price-note">Один платёж · 3 практических модуля · Доступ на 3 дня</p>
+<button class="button open-modal-btn">Получить доступ <span aria-hidden="true">→</span></button>
+<p class="secure">Защищённая оплата через ЮKassa</p>
+<div class="access-bottom"><span>✓ Понятно с нуля</span><span>✓ В своём темпе</span><span>✓ Без программирования</span></div>
+</div>
+</section>
+<section class="section prose" id="system">
+<p class="eyebrow">КАК ЭТО РАБОТАЕТ</p><h2>Один продукт.<br>Контент с ИИ.<br><span>Система вместо ручной работы.</span></h2>
+<p>Не обязательно становиться блогером, собирать команду или месяцами разбираться в коде, чтобы запустить свой цифровой продукт.</p>
+<p>Можно начать с простой идеи: решить одну конкретную задачу для конкретных людей. А нейросети помогут превратить её в продукт, упаковать предложение и подготовить контент.</p>
+<div class="flow" aria-label="Четыре шага системы"><div><b>01</b><strong>Выбери задачу</strong><span>Кому и с чем ты поможешь</span></div><i aria-hidden="true">→</i><div><b>02</b><strong>Собери продукт</strong><span>С помощью AI-агента</span></div><i aria-hidden="true">→</i><div><b>03</b><strong>Привлеки внимание</strong><span>Контентом без лица</span></div><i aria-hidden="true">→</i><div><b>04</b><strong>Принимай оплаты</strong><span>Через свой сайт</span></div></div>
+<p>Твоя задача — выбрать направление и принимать решения. ИИ помогает с текстами, дизайном, сборкой и рутинными действиями.</p>
+<p class="callout">Сначала ты собираешь систему. Потом улучшаешь её по реальным откликам и продажам.</p>
+<a class="text-link" href="#access">Хочу собрать свою систему →</a>
+</section>
+<section class="section tint">
+<div class="prose"><p class="eyebrow">НАЧАТЬ МОЖНО С ТОГО, ЧТО УЖЕ ЕСТЬ</p><h2>Не нужно быть экспертом<br>по всем нейросетям</h2>
+<p>Если ты умеешь объяснить свою идею обычными словами, у тебя уже есть точка старта. Дальше — понятные действия и готовые заготовки.</p>
+<div class="check-grid"><div><span>✓</span><h3>Без съёмок себя</h3><p>Создавай тексты, изображения и видео с ИИ. Личный блог вести необязательно.</p></div><div><span>✓</span><h3>Без команды</h3><p>Первые версии продукта, сайта и контента можно собрать самостоятельно с AI-агентом.</p></div><div><span>✓</span><h3>Без знания кода</h3><p>Ставь задачи обычным языком и повторяй действия из практических материалов.</p></div><div><span>✓</span><h3>Без бесконечной теории</h3><p>У каждого шага есть результат: идея, продукт, страница или готовая публикация.</p></div></div>
+</div></section>
+<section class="section prose founder">
+<div class="founder-head"><img src="founder-photo.jpeg" width="112" height="112" loading="lazy" alt="Максим Тютин, автор AI Hustlers"><div><p class="eyebrow">МАКСИМ ТЮТИН · AI HUSTLERS</p><h2>Зачем я собрал<br>эту программу</h2></div></div>
+<p>Когда начинаешь разбираться в ИИ, легко застрять в обзорах сервисов. Сегодня одна модель, завтра другая. Вкладок всё больше, а своего продукта всё ещё нет.</p>
+<p>Поэтому здесь мы идём от задачи, а не от списка нейросетей. Настраиваем инструменты, создаём то, что можно предложить людям, и собираем путь от первого знакомства до покупки.</p>
+<p><strong>Мне важно, чтобы у тебя осталось не просто понимание ИИ, а собственная рабочая заготовка для запуска.</strong></p>
+<p>Вместо поиска разрозненных инструкций — один маршрут, который ты проходишь шаг за шагом.</p>
+</section>
+<section class="section tint" id="program"><div class="prose">
+<p class="eyebrow">ТВОЙ МАРШРУТ</p><h2>Три шага от идеи<br><span>к первому запуску</span></h2><p>Не нужно сначала изучать всё. Каждый модуль продолжает предыдущий и помогает собрать следующую часть системы.</p>
+<div class="steps">
+<article><div class="step-number">01</div><div><p class="eyebrow">ИНСТРУМЕНТЫ</p><h3>Настрой своего AI-помощника</h3><p>Разберись с AI-агентами, подключи нужные навыки и инструменты. Научись давать задачи так, чтобы получать полезный результат.</p><div class="outcome">На выходе: рабочая среда и понятный способ общаться с ИИ.</div></div></article>
+<article><div class="step-number">02</div><div><p class="eyebrow">ПРОДУКТ И ОПЛАТА</p><h3>Преврати идею в цифровой продукт</h3><p>Выбери задачу, собери первую версию продукта, создай страницу с предложением и разберись с подключением платежей.</p><div class="outcome">На выходе: продукт и страница, которую можно показать аудитории.</div></div></article>
+<article><div class="step-number">03</div><div><p class="eyebrow">КОНТЕНТ И ПРОДВИЖЕНИЕ</p><h3>Приведи людей к своему предложению</h3><p>Подготовь контент-план, тексты и визуалы с ИИ. Собери простую воронку и пойми, что измерять после публикации.</p><div class="outcome">На выходе: контент и план привлечения первых пользователей.</div></div></article>
+</div><a class="button" href="#access">Начать с первого шага →</a>
+</div></section>
+<section class="section prose" id="materials"><p class="eyebrow">ЧТО ВНУТРИ</p><h2>Всё необходимое<br>для старта — в одном месте</h2><p>Не придётся каждый раз начинать с пустого экрана. Используй материалы как основу и адаптируй их под свой продукт.</p>
+<article class="material"><div class="material-copy"><span class="label">01 / ПОШАГОВАЯ ПРАКТИКА</span><h3>Смотри и повторяй<br>на своём проекте</h3><p>Материалы по настройке AI-агентов, созданию продукта, странице продаж и продвижению. Поставь на паузу, сделай у себя и переходи дальше.</p></div><div class="mini-window"><div class="window-bar"><i></i><i></i><i></i><span>Твой маршрут запуска</span></div><div class="lesson"><b>01</b><span>AI-агенты и инструменты</span><em>Начать →</em></div><div class="lesson"><b>02</b><span>Продукт и приём оплат</span></div><div class="lesson"><b>03</b><span>Контент и продвижение</span></div></div></article>
+<article class="material"><div class="material-copy"><span class="label">02 / ГОТОВЫЕ ПРОМПТЫ</span><h3>Объясни задачу ИИ<br>без сложных формул</h3><p>Заготовки для поиска идеи, структуры продукта, текстов сайта и контент-плана. Подставь свою тему и доработай ответ под свою аудиторию.</p></div><div class="prompt-card"><span>ПРИМЕР ЗАДАЧИ ДЛЯ ИИ</span><p>«Помоги выбрать идею цифрового продукта для [аудитории]. Найди одну конкретную задачу, предложи решение и структуру первой версии».</p><div>Твоя тема + твоя аудитория = точка старта</div></div></article>
+<article class="material"><div class="material-copy"><span class="label">03 / ПРОДУКТ И ВОРОНКА</span><h3>Понятная схема<br>от контента до покупки</h3><p>Шаблоны и логика страниц, которые помогают связать полезный контент, предложение и оплату. Чтобы у каждого следующего шага была цель.</p></div><div class="funnel"><div>Полезная публикация <span>01</span></div><b>↓</b><div>Страница продукта <span>02</span></div><b>↓</b><div>Оплата и доступ <span>03</span></div></div></article>
+<article class="material"><div class="material-copy"><span class="label">04 / КОНТЕНТ БЕЗ ЛИЦА</span><h3>Не думай каждый день,<br>что опубликовать</h3><p>Собери систему тем и форматов: объяснение проблемы, полезный разбор, демонстрация продукта. ИИ поможет написать сценарии и подготовить визуалы.</p></div><div class="content-board"><span>ТВОЯ КОНТЕНТ-НЕДЕЛЯ</span><div><b>ПН</b><strong>Объясни проблему</strong><small>Полезный пост</small></div><div><b>СР</b><strong>Покажи решение</strong><small>Разбор или короткое видео</small></div><div><b>ПТ</b><strong>Познакомь с продуктом</strong><small>Демонстрация + ссылка</small></div></div></article>
+</section>
+<section class="section dark-band"><div class="prose"><p class="eyebrow">МЕНЬШЕ РАЗРОЗНЕННЫХ ДЕЙСТВИЙ</p><h2><span>Основа твоего проекта.</span><br>От идеи до предложения.</h2><p>AI-инструменты полезны, когда работают на одну цель. Здесь ты связываешь их в последовательность: придумать, собрать, показать и предложить купить.</p><a class="button" href="#access">Собрать свою AI-систему →</a></div></section>
+<section class="section prose"><p class="eyebrow">ПЕРЕД ТЕМ КАК НАЧАТЬ</p><h2>Что понадобится от тебя</h2><ul class="plain-list"><li><b>Ноутбук и интернет.</b> Для настройки инструментов и работы над продуктом.</li><li><b>Время на практику.</b> Выдели несколько спокойных рабочих сессий, чтобы повторить шаги на своём проекте.</li><li><b>Готовность проверять идеи.</b> Первый вариант — точка старта. Его нужно показывать людям и улучшать.</li></ul><p class="small-note">Отдельные AI-сервисы могут требовать подписки или иметь ограничения по региону. Доход зависит от продукта, спроса и твоих действий; покупка программы сама по себе его не гарантирует.</p></section>
+<section class="section tint" id="faq"><div class="prose"><p class="eyebrow">БЕЗ ОСТАВШИХСЯ ВОПРОСОВ</p><h2>Давай разберём главное</h2>
+<details><summary>Подойдёт, если я раньше не работал с ИИ?<span aria-hidden="true">+</span></summary><p>Да. Начинаем с настройки инструментов и простых задач. Не нужно заранее разбираться в программировании или дизайне — важно повторять шаги и проверять результат.</p></details><details><summary>Обязательно показывать лицо и вести личный блог?<span aria-hidden="true">+</span></summary><p>Нет. Можно использовать тексты, изображения, демонстрации экрана и короткие видео с ИИ. Выбирай формат, который подходит продукту и твоей аудитории.</p></details><details><summary>Если у меня ещё нет идеи продукта?<span aria-hidden="true">+</span></summary><p>Начни с аудитории и одной её задачи. В программе разбираем, как использовать ИИ для поиска направлений и подготовки первой версии предложения.</p></details><details><summary>Как устроен доступ?<span aria-hidden="true">+</span></summary><p>После успешной оплаты открывается доступ к трём практическим модулям на 3 дня. Ссылки и дальнейшие шаги появятся на странице подтверждения. При проблемах с доступом напиши в поддержку.</p></details><details><summary>Нужно ли покупать дорогие сервисы?<span aria-hidden="true">+</span></summary><p>Начать можно с доступных инструментов, но у некоторых сервисов есть платные функции и региональные ограничения. Стоимость сторонних подписок не включена в программу.</p></details><details><summary>Когда появятся первые продажи?<span aria-hidden="true">+</span></summary><p>У всех по-разному. Сначала нужно собрать продукт, проверить спрос и привести аудиторию. Мы даём маршрут и материалы, но не обещаем определённую сумму или срок заработка.</p></details><details><summary>Как проходит оплата и куда обращаться за помощью?<span aria-hidden="true">+</span></summary><p>Оплата — 2 990 ₽ через защищённую страницу ЮKassa. По вопросам оплаты, доступа и возврата напиши на maxtyutin@gmail.com или в Telegram @tyutinmax. Условия указаны в оферте.</p></details>
+</div></section>
+<section class="section prose final"><p class="eyebrow">ТВОЙ СЛЕДУЮЩИЙ ШАГ</p><h2>Можно продолжать изучать ИИ.<br><span>А можно собрать с ним своё.</span></h2><p>Начни с одной идеи. Пройди три практических модуля.<br>Собери основу продукта, контента и продаж.</p><div class="price">2 990 <span>₽</span></div><button class="button open-modal-btn">Получить доступ к программе →</button><p class="secure">Один платёж. Доступ на 3 дня. Оплата через ЮKassa.</p></section>
+</main>
+<footer><div class="shell"><div class="footer-top"><a class="wordmark" href="./">AI HUSTLERS</a><p>Практическая программа создания<br>и продажи цифровых продуктов с ИИ.</p><a href="https://t.me/tyutinmax" target="_blank" rel="noopener noreferrer">Написать в поддержку ↗</a></div><div class="footer-info"><p>© 2026 AI Hustlers<br>ИП Тютин Максим Андреевич<br>ИНН 440319672959 · ОГРНИП 323440000018883</p><p><a href="mailto:maxtyutin@gmail.com">maxtyutin@gmail.com</a><br>+7 915 921-40-60</p></div><div class="footer-links"><a href="privacy.html">Конфиденциальность</a><a href="offer.html">Оферта</a><a href="consent.html">Обработка данных</a><a href="marketing.html">Рекламная рассылка</a></div></div></footer>
+<div class="modal-overlay" id="app-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+<div class="modal-box"><button class="modal-close" type="button" aria-label="Закрыть форму">×</button><p class="eyebrow">AI HUSTLERS</p><h2 id="modal-title">Твоя система начинается здесь</h2><p>Оставь контакты для доступа к материалам.<br>Далее — защищённая оплата 2 990 ₽.</p>
+<form id="app-form" method="POST" autocomplete="on">
+<input type="hidden" name="access_key" id="web3forms-access-key" value="41bc8576-ffd3-4a5d-bf2f-456a11df1864"><input type="hidden" name="subject" value="Новая заявка на программу AI HUSTLERS"><input type="hidden" name="from_name" value="AI Hustlers Website"><input type="checkbox" name="botcheck" hidden tabindex="-1">
+<label for="name_input">Твоё имя</label><input type="text" id="name_input" name="name" autocomplete="given-name" required placeholder="Как к тебе обращаться">
+<label for="email_input">Email для доступа</label><input type="email" id="email_input" name="email" autocomplete="email" required placeholder="you@example.com">
+<label for="phone">Телефон</label><input type="tel" id="phone" name="phone" autocomplete="tel" required>
+<label class="consent"><input type="checkbox" required name="consent" value="yes"><span>Принимаю <a href="offer.html" target="_blank" rel="noopener">оферту</a> и даю <a href="consent.html" target="_blank" rel="noopener">согласие на обработку данных</a> согласно <a href="privacy.html" target="_blank" rel="noopener">политике конфиденциальности</a>.</span></label>
+<button class="button" id="submit-btn" type="submit"><span>Перейти к оплате · 2 990 ₽ →</span><span id="btn-spinner" class="spinner" style="display:none" aria-hidden="true"></span></button><p id="form-msg" class="form-message" role="alert" style="display:none"></p></form></div></div>
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.12/build/js/intlTelInput.min.js"></script><script src="app.js?v=20261106-1"></script><script src="landing.js?v=20261106-1"></script>
+</body></html>

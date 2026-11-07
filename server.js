@@ -188,7 +188,7 @@ function generateBuyerEmailHTML(userName, userId) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Персональный доступ к тест-драйву AI HUSTLERS</title>
+  <title>Персональный доступ к программе AI HUSTLERS</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #0b0c10; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #ffffff;">
   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0b0c10; padding: 40px 10px;">
@@ -217,7 +217,7 @@ function generateBuyerEmailHTML(userName, userId) {
               </h2>
 
               <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #a0a5b5;">
-                Поздравляем! Ваш индивидуальный доступ к <b>трёхдневному тест-драйву ИИ-системы AI HUSTLERS</b> успешно активирован.
+                Поздравляем! Ваш индивидуальный доступ к <b>практической программе ИИ-системы AI HUSTLERS</b> успешно активирован.
               </p>
 
               <!-- Unique User Token Card -->
@@ -319,7 +319,7 @@ async function sendBuyerWelcomeEmail(userEmail, userName, userId) {
     return;
   }
 
-  const subject = "Ваш доступ к трёхдневному тест-драйву AI HUSTLERS 🎉";
+  const subject = "Ваш доступ к практической программе AI HUSTLERS 🎉";
   const htmlContent = generateBuyerEmailHTML(userName, userId);
 
   // 1. Отправка через Nodemailer/SMTP (если настроены переменные окружения SMTP_USER и SMTP_PASS)
@@ -418,7 +418,7 @@ app.post('/api/create-payment', async (req, res) => {
           type: 'redirect',
           return_url: `https://maxtyutin.github.io/aihustler-trial/confirmed.html?userId=${userId}`
         },
-        description: 'Оплата трёхдневного тест-драйва системы',
+        description: 'Оплата практической программы системы',
         metadata: {
           user_id: userId,
           user_name: name || 'Не указано',
@@ -578,7 +578,7 @@ app.post('/api/telegram-webhook', async (req, res) => {
       const userId = data.replace('check_', '');
       if (await isUserPaid(userId)) {
         await sendTelegramMessage(chatId,
-          `<b>Доступ подтвержден!</b> 🎉\n\nОтлично, оплата поступила! Нажмите кнопку ниже для перехода к просмотру тест-драйва:`,
+          `<b>Доступ подтвержден!</b> 🎉\n\nОтлично, оплата поступила! Нажмите кнопку ниже для перехода к просмотру программы:`,
           [
             [
               { text: '🎬 Смотреть программу 1 дня', url: `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}` }
@@ -654,7 +654,7 @@ app.post('/api/telegram-webhook', async (req, res) => {
       const userId = data.replace('watched_3_', '');
       // Отправляем финальный пост о наставничестве
       await sendTelegramMessage(chatId,
-        `<b>Личное наставничество со мной (Максим Тютин)</b> 💎\n\nПоздравляю вас с успешным завершением трёхдневного тест-драйва ИИ-системы! 🎉\n\nЕсли вы хотите под моим личным руководством запустить ИИ-систему на полную мощность, настроить автопилот маркетинга и продаж и выйти на стабильные <b>5000$ в месяц</b>, приглашаю вас в программу индивидуального наставничества.\n\nСтоимость наставничества: <b>100 000 рублей</b>.\n\nКоличество мест сильно ограничено. Пожалуйста, заполните анкету предзаписи ниже, и я свяжусь с вами лично для собеседования:`,
+        `<b>Личное наставничество со мной (Максим Тютин)</b> 💎\n\nПоздравляю вас с успешным завершением практической программы ИИ-системы! 🎉\n\nЕсли вы хотите под моим личным руководством запустить ИИ-систему на полную мощность, настроить автопилот маркетинга и продаж и выйти на стабильные <b>5000$ в месяц</b>, приглашаю вас в программу индивидуального наставничества.\n\nСтоимость наставничества: <b>100 000 рублей</b>.\n\nКоличество мест сильно ограничено. Пожалуйста, заполните анкету предзаписи ниже, и я свяжусь с вами лично для собеседования:`,
         [[
           { text: '📝 Заполнить анкету предзаписи', url: 'https://forms.gle/49ZtS9Xg8aF8Q5Y88' }
         ]]
@@ -687,7 +687,7 @@ app.post('/api/telegram-webhook', async (req, res) => {
     if (!userId) {
       // Сценарий: пользователь пришел без ID (не оплатил)
       await sendTelegramMessage(chatId, 
-        `<b>Доступ ограничен</b>\n\nПривет! К сожалению, я не нашёл активной оплаты тест-драйва для вашего аккаунта.\n\nЧтобы активировать тест-драйв ИИ-системы AI HUSTLERS, оформите заказ на нашем сайте:`,
+        `<b>Доступ ограничен</b>\n\nПривет! К сожалению, я не нашёл активной оплаты программы для вашего аккаунта.\n\nЧтобы активировать программу ИИ-системы AI HUSTLERS, оформите заказ на нашем сайте:`,
         [[
           { text: '💳 Оплатить доступ за 2 990 ₽', url: 'https://maxtyutin.github.io/aihustler-trial/' }
         ]]
@@ -697,7 +697,7 @@ app.post('/api/telegram-webhook', async (req, res) => {
       if (await isUserPaid(userId)) {
         // Оплачено! Отправляем пост 1-го дня программы
         await sendTelegramMessage(chatId,
-          `<b>Доступ подтвержден!</b> 🎉\n\nПоздравляем! Оплата тест-драйва ИИ-системы успешно получена.\n\nНажмите кнопку ниже, чтобы начать первый день тест-драйва:`,
+          `<b>Доступ подтвержден!</b> 🎉\n\nПоздравляем! Оплата программы ИИ-системы успешно получена.\n\nНажмите кнопку ниже, чтобы начать первый день программы:`,
           [
             [
               { text: '🎬 Смотреть программу 1 дня', url: `https://maxtyutin.github.io/aihustler-trial/day1.html?userId=${userId}` }

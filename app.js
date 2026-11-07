@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const phoneInput = document.querySelector("#phone");
   let iti;
 
-  if (phoneInput) {
+  if (phoneInput && typeof window.intlTelInput === 'function') {
       phoneInput.value = "+7";
 
       iti = window.intlTelInput(phoneInput, {
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (submitBtn) {
           submitBtn.disabled = false;
-          if (btnText) btnText.textContent = 'ОПЛАТИТЬ ТЕСТ-ДРАЙВ ➔';
+          if (btnText) btnText.textContent = 'Перейти к оплате · 2 990 ₽ →';
           if (btnSpinner) btnSpinner.style.display = 'none';
       }
   };
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
               console.error('Error submitting form/creating payment:', error);
               
               if (submitBtn) submitBtn.disabled = false;
-              if (btnText) btnText.textContent = 'ОПЛАТИТЬ ТЕСТ-ДРАЙВ ➔';
+              if (btnText) btnText.textContent = 'Перейти к оплате · 2 990 ₽ →';
               if (btnSpinner) btnSpinner.style.display = 'none';
               
               if (formMsg) {
